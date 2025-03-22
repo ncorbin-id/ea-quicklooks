@@ -1,0 +1,72 @@
+body, html {
+    margin-top: 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f0f0; /* Optional: to set a background color */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px; /* Set the global font size */
+    align-content: center; /* Center content vertically */
+}
+
+.controls-container {
+    margin-top: 0px; /* Adjust margin as needed */
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
+    align-items: center; /* Center content horizontally */
+    gap: 10px; /* Space between rows */
+}
+
+.top-row, .bottom-row {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 10px; /* Space between items */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 columns */
+    gap: 3px; /* Gap between grid items */
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+.grid-item {
+    overflow: visible; /* Hide overflowing content */
+    border: 0px solid #ddd; /* Optional: Border for grid items */
+    position: relative; /* Ensure positioning for the border */
+    margin-right: 5px;
+}
+
+.grid-item img {
+    display: block; /* Remove default inline-block spacing */
+    width: 100%; /* Ensure image fills grid item width while maintaining aspect ratio */
+    height: 70px; /* Set the desired height */
+    object-fit: contain; /* Fit image inside the grid item without cropping */
+    cursor: pointer;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    transition: transform 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+}
+
+/* Style for images on hover */
+#imageGrid img:hover {
+    /* transform: scale(1.05); */
+    border-color: #007BFF; /* Blue outline */
+}
+
+.image-container {
+    display: flex;
+    align-items: center; /* Center image vertically within container */
+    justify-content: center; /* Center image horizontally within container */
+    height: 80vh; /* Adjust to desired height */
+    width: 100%; /* Full width of the viewport */
+    padding: 20px; /* Add padding if needed */
+}
+
+#fullsizeImage {
+    max-width: 100%; /* Ensure image doesn't overflow container */
+    max-height: 100%; /* Ensure image doesn't exceed container height */
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    object-fit: contain; /* Preserve aspect ratio */
+}

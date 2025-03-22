@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Grid</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="controls-container">
+        <div class="top-row">
+            <!-- Product Dropdown -->
+            <label for="product">Product:</label>
+            <select id="product">
+                <option value="bs_3km">Backscatter, 3 km</option>
+                <option value="bs_15km">Backscatter, 15 km</option>
+            </select>
+
+            <!-- Date Selection -->
+            <label for="year">Year:</label>
+            <select id="year"></select>
+
+            <label for="month">Month:</label>
+            <select id="month"></select>
+
+            <label for="day">Day:</label>
+            <select id="day"></select>
+
+            <button id="goButton">Go</button>
+        </div>
+
+        <div class="bottom-row">
+            <!-- Navigation Buttons -->
+            <button id="todayButton">Today</button>
+            <button id="prevButton">Previous</button>
+
+            <!-- Increment Dropdown -->
+            <label for="increment">Increment:</label>
+            <select id="increment">
+                <option value="1">1 day</option>
+                <option value="7">7 days</option>
+                <option value="30">30 days</option>
+            </select>
+            <button id="nextButton">Next</button>
+        </div>
+    </div>
+
+    <div id="imageGrid" class="grid-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
