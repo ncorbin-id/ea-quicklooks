@@ -69,11 +69,10 @@ function updateImages() {
     const selectedDateString = getDateString();
     const product = productSelect.value;
     const baseThumbnailURL = thumbnailBaseURL(product);
-    imageGrid.innerHTML = '';
+    imageGrid.innerHTML = ''; // Clears existing images
 
     const startDate = new Date(yearSelect.value, monthSelect.value - 1, daySelect.value);
     let lastImageExists = false;
-    
     const imagePromises = [];
 
     for (let i = 0; i < 36; i++) {
@@ -89,7 +88,12 @@ function updateImages() {
         // Create image element
         const img = document.createElement('img');
         img.alt = `Thumbnail ${i}`;
-        img.onerror = () => { img.src = fallbackImage; };
+
+        // Set error handler for fallback if initial loading fails
+        img.onerror = function () {
+            this.onerror = null; // Prevent infinite fallback loop
+            this.src = fallbackImage;
+        };
 
         // Create grid item
         const gridItem = document.createElement('div');
