@@ -152,10 +152,10 @@ function setToday() {
     updateImages();
 }
 
-// Event listeners
+/* archive: // Event listeners
 goButton.addEventListener('click', () => {
     updateImages();
-});
+}); */
 
 todayButton.addEventListener('click', () => {
     setToday();
