@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--vscode test-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,21 +18,13 @@
             </select>
 
             <!-- Date Selection -->
-            <label for="year">Year:</label>
-            <select id="year"></select>
-
-            <label for="month">Month:</label>
-            <select id="month"></select>
-
-            <label for="day">Day:</label>
-            <select id="day"></select>
-
-            <button id="goButton">Go</button>
+            <label for="cal">UTC Date:</label>
+            <input id="cal" type="text" value>
+            <button id="todayButton">Today</button>
         </div>
 
         <div class="bottom-row">
             <!-- Navigation Buttons -->
-            <button id="todayButton">Today</button>
             <button id="prevButton">Previous</button>
 
             <!-- Increment Dropdown -->
@@ -43,15 +34,13 @@
                 <option value="7">7 days</option>
                 <option value="30">30 days</option>
             </select>
+            <button id="goButton">Go</button>
             <button id="nextButton">Next</button>
         </div>
     </div>
 
     <div id="imageGrid" class="grid-container"></div>
 
-    <input id="cal" type="text" placeholder="Select a date">
-
-    
     <script src="air-datepicker/air-datepicker.js"></script>
     <script src="js/script.js"></script>
 </body>

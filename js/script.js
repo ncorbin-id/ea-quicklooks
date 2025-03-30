@@ -1,7 +1,5 @@
 // Ensure the required elements are present
-const yearSelect = document.getElementById('year');
-const monthSelect = document.getElementById('month');
-const daySelect = document.getElementById('day');
+let activeDate = new Date(); // Default to today's date
 const goButton = document.getElementById('goButton');
 const productSelect = document.getElementById('product');
 const imageGrid = document.getElementById('imageGrid');
@@ -11,13 +9,14 @@ const todayButton = document.getElementById('todayButton');
 const incrementSelect = document.getElementById('increment');
 
 // Set the base URL for images
-const sourceURL = '.'; // Update this path as needed
+const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/'; 
 const thumbnailBaseURL = (product) => `${sourceURL}/images/thumbnail_${product}_`;
-const fallbackImage = `${sourceURL}/images/noimage.png`;
+// const fallbackImage = `${sourceURL}/images/noimage.png`;
+const fallbackImage = `./images/noimage.png`;
 
-// Initialize Air Datepicker on an element with the ID #maincal
+// Initialize Air Datepicker
 document.addEventListener('DOMContentLoaded', function () {
-    new AirDatepicker('#cal', {
+    const datepicker = new AirDatepicker('#cal', {
         locale: {
             days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -30,49 +29,32 @@ document.addEventListener('DOMContentLoaded', function () {
             timeFormat: 'hh:mm aa',
             firstDay: 0
         },
-        autoClose: true, // Example option to auto-close after date selection
-        dateFormat: 'yyyy-MM-dd', // Customize the date format
+        autoClose: true,
+        defaultDate: activeDate,
+        onSelect({ date }) {
+            activeDate = date; // Update activeDate when the user picks a date
+            updateImages(); // Refresh images after selecting a date
+        }
     });
+
+    // Set default date to activeDate (default is Today)
+    document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
+
+    // Disable Next button if activeDate is Today
+    const today = new Date(); 
+    today.setHours(0, 0, 0, 0); // Normalize to midnight
+    activeDate.setHours(0, 0, 0, 0); // Normalize to midnight
+    nextButton.disabled = activeDate >= today;
+
+    // Load images on page load
+    updateImages(); 
 });
-
-// Populate date dropdowns
-function populateDateDropdowns() {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-
-    // Populate years
-    for (let year = currentYear - 5; year <= currentYear + 5; year++) {
-        const option = document.createElement('option');
-        option.value = year;
-        option.textContent = year;
-        yearSelect.appendChild(option);
-    }
-
-    // Populate months
-    for (let month = 1; month <= 12; month++) {
-        const option = document.createElement('option');
-        option.value = String(month).padStart(2, '0');
-        option.textContent = month;
-        monthSelect.appendChild(option);
-    }
-
-    // Populate days
-    for (let day = 1; day <= 31; day++) {
-        const option = document.createElement('option');
-        option.value = String(day).padStart(2, '0');
-        option.textContent = day;
-        daySelect.appendChild(option);
-    }
-
-    // Set default date
-    setInitialDateTime();
-}
 
 // Function to get the selected date as a string
 function getDateString() {
-    const year = yearSelect.value;
-    const month = monthSelect.value;
-    const day = daySelect.value;
+    const year = activeDate.getFullYear();
+    const month = String(activeDate.getMonth() + 1).padStart(2, '0');
+    const day = String(activeDate.getDate()).padStart(2, '0');
     return `${year}${month}${day}`;
 }
 
@@ -86,13 +68,13 @@ function imageExists(url, callback) {
 
 // Function to update images based on selected date
 function updateImages() {
-    const selectedDateString = getDateString();
+    const activeDateString = getDateString();
     const product = productSelect.value;
     const baseThumbnailURL = thumbnailBaseURL(product);
     imageGrid.innerHTML = ''; // Clears existing images
 
-    const startDate = new Date(yearSelect.value, monthSelect.value - 1, daySelect.value);
-    let lastImageExists = false;
+    const startDate = new Date(activeDate);
+    // let lastImageExists = false;
     const imagePromises = [];
 
     for (let i = 0; i < 36; i++) {
@@ -130,10 +112,6 @@ function updateImages() {
         const imagePromise = new Promise((resolve) => {
             imageExists(thumbnailURL, (exists) => {
                 img.src = exists ? thumbnailURL : fallbackImage;
-                if (i === 35) {
-                    lastImageExists = exists;
-                    checkNextButton(lastImageExists);
-                }
                 resolve();
             });
         });
@@ -147,53 +125,30 @@ function updateImages() {
     });
 }
 
-// Function to check if the Next button should be enabled or disabled
-function checkNextButton(lastImageExists) {
-    nextButton.disabled = !lastImageExists;
-}
-
-// Function to change the date
 function changeDate(days) {
-    const currentDate = new Date(Date.UTC(yearSelect.value, monthSelect.value - 1, daySelect.value));
-    currentDate.setUTCDate(currentDate.getUTCDate() + days);
+    var newDate = new Date(activeDate);
+    newDate.setDate(newDate.getDate() + days);
 
-    // Ensure the date is valid after change
-    const newYear = currentDate.getFullYear();
-    const newMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const newDay = String(currentDate.getDate()).padStart(2, '0');
+    const today = new Date(); 
+    today.setHours(0, 0, 0, 0); // Normalize to midnight
+    newDate.setHours(0, 0, 0, 0); // Normalize to midnight
 
-    // Update dropdown values
-    yearSelect.value = newYear;
-    monthSelect.value = newMonth;
-    daySelect.value = newDay;
+    // Disable Next button if newDate is today or beyond
+    nextButton.disabled = newDate >= today;
 
-    updateImages();
+    // Update activeDate and datepicker if valid
+    if (newDate <= today) {
+        activeDate = newDate;
+        document.querySelector('#cal').value = newDate.toISOString().split('T')[0];
+        updateImages();
+    }
 }
 
-// Function to set the initial date
-function setInitialDateTime() {
-    // Create the initial date in UTC to avoid time zone issues
-    const initialDate = new Date(Date.UTC(2024, 6, 18)); // Month is 0-based (6 = July)
-    
-    yearSelect.value = initialDate.getUTCFullYear();
-    monthSelect.value = String(initialDate.getUTCMonth() + 1).padStart(2, '0'); // Add 1 since months are 0-based
-    daySelect.value = String(initialDate.getUTCDate()).padStart(2, '0');
-
-    updateImages();
-}
-
-// Function to set date to today
+// Set date to today using datepicker
 function setToday() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-
-    // Update dropdown values
-    yearSelect.value = year;
-    monthSelect.value = month;
-    daySelect.value = day;
-
+    activeDate = new Date();
+    document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
+    console.log(activeDate.toISOString().split('T')[0]);
     updateImages();
 }
 
@@ -215,6 +170,3 @@ nextButton.addEventListener('click', () => {
     const increment = parseInt(incrementSelect.value, 10);
     changeDate(increment); // Move forward by the selected increment
 });
-
-// Populate dropdowns on page load
-populateDateDropdowns();
