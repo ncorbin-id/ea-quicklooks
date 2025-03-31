@@ -12,7 +12,7 @@ const incrementSelect = document.getElementById('increment');
 // Set the base URL for images
 const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/'; 
 const fileext = '.jpg';
-const getImageName = (year, month, day, thumb, fileext) =>
+const getThumbImageName = (year, month, day, thumb, fileext) =>
     `thumbnail_tbs_${year}${month}${day}_${thumb}${fileext}`;
 const getThumbnailURL = (sourceURL, year, month, imageName) =>
     `${sourceURL}${year}${month}/${imageName}`;
@@ -80,8 +80,8 @@ function updateImages() {
         const day = String(date.getUTCDate()).padStart(2, '0');
 
         // Thumbnail URL construction
-        const imageName = getImageName(year, month, day, thumb, fileext);
-        const thumbnailURL = getThumbnailURL(sourceURL, year, month, imageName);
+        const thumbImageName = getThumbImageName(year, month, day, thumb, fileext);
+        const thumbnailURL = getThumbnailURL(sourceURL, year, month, thumbImageName);
 
         // Create image element
         const img = document.createElement('img');
@@ -144,14 +144,9 @@ function changeDate(days) {
 function setToday() {
     activeDate = new Date();
     document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
-    console.log(activeDate.toISOString().split('T')[0]);
+    nextButton.disabled = true;
     updateImages();
 }
-
-/* archive: // Event listeners
-goButton.addEventListener('click', () => {
-    updateImages();
-}); */
 
 todayButton.addEventListener('click', () => {
     setToday();
@@ -165,4 +160,8 @@ prevButton.addEventListener('click', () => {
 nextButton.addEventListener('click', () => {
     const increment = parseInt(incrementSelect.value, 10);
     changeDate(increment); // Move forward by the selected increment
+});
+
+thumbSelect.addEventListener('change', () => {
+    updateImages(); // Refresh images when thumbnail selection changes
 });
