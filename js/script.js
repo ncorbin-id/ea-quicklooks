@@ -1,7 +1,9 @@
 // Ensure the required elements are present
-let activeDate = new Date(); // Default to today's date
+let activeDate = new Date(Date.UTC(2024, 9, 13, 0, 10, 0)); 
+// let activeDate = new Date(); // Default to today's date --> new Date();
+// console.log('Active Date: ',activeDate.toISOString());
 const goButton = document.getElementById('goButton');
-const productSelect = document.getElementById('product');
+const thumbSelect = document.getElementById('thumb');
 const imageGrid = document.getElementById('imageGrid');
 const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
@@ -10,8 +12,11 @@ const incrementSelect = document.getElementById('increment');
 
 // Set the base URL for images
 const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/'; 
-const thumbnailBaseURL = (product) => `${sourceURL}/images/thumbnail_${product}_`;
-// const fallbackImage = `${sourceURL}/images/noimage.png`;
+const fileext = '.jpg';
+const getThumbImageName = (year, month, day, thumb, fileext) =>
+    `thumbnail_tbs_${year}${month}${day}_${thumb}${fileext}`;
+const getThumbnailURL = (sourceURL, year, month, imageName) =>
+    `${sourceURL}${year}${month}/${imageName}`;
 const fallbackImage = `./images/noimage.png`;
 
 // Initialize Air Datepicker
@@ -43,20 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Disable Next button if activeDate is Today
     const today = new Date(); 
     today.setHours(0, 0, 0, 0); // Normalize to midnight
-    activeDate.setHours(0, 0, 0, 0); // Normalize to midnight
     nextButton.disabled = activeDate >= today;
 
     // Load images on page load
     updateImages(); 
 });
-
-// Function to get the selected date as a string
-function getDateString() {
-    const year = activeDate.getFullYear();
-    const month = String(activeDate.getMonth() + 1).padStart(2, '0');
-    const day = String(activeDate.getDate()).padStart(2, '0');
-    return `${year}${month}${day}`;
-}
 
 // Function to check if an image exists by making a request
 function imageExists(url, callback) {
@@ -68,24 +64,25 @@ function imageExists(url, callback) {
 
 // Function to update images based on selected date
 function updateImages() {
-    const activeDateString = getDateString();
-    const product = productSelect.value;
-    const baseThumbnailURL = thumbnailBaseURL(product);
+    const thumb = thumbSelect.value;
     imageGrid.innerHTML = ''; // Clears existing images
 
-    const startDate = new Date(activeDate);
-    // let lastImageExists = false;
+    const startDate = activeDate;
     const imagePromises = [];
 
     for (let i = 0; i < 36; i++) {
+        // Get date as strings for URL construction
         const date = new Date(startDate);
-        date.setDate(startDate.getDate() - (35 - i)); // Adjust logic
+        date.setDate(startDate.getDate() - (35 - i)); 
 
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const imageName = `${year}${month}${day}.png`;
-        const thumbnailURL = `${baseThumbnailURL}${imageName}`;
+        // console.log(date.toISOString()); 
+        const year = String(date.getUTCFullYear());
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+
+        // Thumbnail URL construction
+        const thumbImageName = getThumbImageName(year, month, day, thumb, fileext);
+        const thumbnailURL = getThumbnailURL(sourceURL, year, month, thumbImageName);
 
         // Create image element
         const img = document.createElement('img');
@@ -103,7 +100,7 @@ function updateImages() {
 
         // Create link
         const link = document.createElement('a');
-        link.href = `fullsize.html?product=${product}&year=${year}&month=${month}&day=${day}`;
+        link.href = `fullsize.html?thumb=${thumb}&year=${year}&month=${month}&day=${day}`;
         link.appendChild(img);
 
         gridItem.appendChild(link);
@@ -127,35 +124,34 @@ function updateImages() {
 
 function changeDate(days) {
     var newDate = new Date(activeDate);
-    newDate.setDate(newDate.getDate() + days);
+    newDate.setDate(activeDate.getDate() + days);
+    activeDate = newDate;
+    document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
+    updateImages();
 
+    // Check if activeDate is in the future, disable Next button
     const today = new Date(); 
-    today.setHours(0, 0, 0, 0); // Normalize to midnight
-    newDate.setHours(0, 0, 0, 0); // Normalize to midnight
+    todayStr = today.toISOString().slice(0, 10);
+    activeDateStr = activeDate.toISOString().slice(0, 10);
 
     // Disable Next button if newDate is today or beyond
-    nextButton.disabled = newDate >= today;
+    nextButton.disabled = activeDateStr >= todayStr;
 
-    // Update activeDate and datepicker if valid
+    /*// Update activeDate and datepicker if valid
     if (newDate <= today) {
         activeDate = newDate;
         document.querySelector('#cal').value = newDate.toISOString().split('T')[0];
         updateImages();
-    }
+    }*/
 }
 
 // Set date to today using datepicker
 function setToday() {
     activeDate = new Date();
     document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
-    console.log(activeDate.toISOString().split('T')[0]);
+    nextButton.disabled = true;
     updateImages();
 }
-
-/* archive: // Event listeners
-goButton.addEventListener('click', () => {
-    updateImages();
-}); */
 
 todayButton.addEventListener('click', () => {
     setToday();
@@ -169,4 +165,8 @@ prevButton.addEventListener('click', () => {
 nextButton.addEventListener('click', () => {
     const increment = parseInt(incrementSelect.value, 10);
     changeDate(increment); // Move forward by the selected increment
+});
+
+thumbSelect.addEventListener('change', () => {
+    updateImages(); // Refresh images when thumbnail selection changes
 });
