@@ -1,6 +1,7 @@
 // Ensure the required elements are present
-let activeDate = new Date(Date.UTC(2024, 9, 13, 0, 0, 0)); 
+let activeDate = new Date(Date.UTC(2024, 9, 13, 0, 10, 0)); 
 // let activeDate = new Date(); // Default to today's date --> new Date();
+// console.log('Active Date: ',activeDate.toISOString());
 const goButton = document.getElementById('goButton');
 const thumbSelect = document.getElementById('thumb');
 const imageGrid = document.getElementById('imageGrid');
@@ -123,21 +124,25 @@ function updateImages() {
 
 function changeDate(days) {
     var newDate = new Date(activeDate);
-    newDate.setDate(newDate.getDate() + days);
+    newDate.setDate(activeDate.getDate() + days);
+    activeDate = newDate;
+    document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
+    updateImages();
 
+    // Check if activeDate is in the future, disable Next button
     const today = new Date(); 
-    today.setHours(0, 0, 0, 0); // Normalize to midnight
-    newDate.setHours(0, 0, 0, 0); // Normalize to midnight
+    todayStr = today.toISOString().slice(0, 10);
+    activeDateStr = activeDate.toISOString().slice(0, 10);
 
     // Disable Next button if newDate is today or beyond
-    nextButton.disabled = newDate >= today;
+    nextButton.disabled = activeDateStr >= todayStr;
 
-    // Update activeDate and datepicker if valid
+    /*// Update activeDate and datepicker if valid
     if (newDate <= today) {
         activeDate = newDate;
         document.querySelector('#cal').value = newDate.toISOString().split('T')[0];
         updateImages();
-    }
+    }*/
 }
 
 // Set date to today using datepicker
