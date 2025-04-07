@@ -1,7 +1,8 @@
 // Ensure the required elements are present
-let activeDate = new Date(Date.UTC(2024, 9, 13, 0, 10, 0)); 
-// let activeDate = new Date(); // Default to today's date --> new Date();
-// console.log('Active Date: ',activeDate.toISOString());
+// let activeDate = new Date(Date.UTC(2024, 9, 13, 0, 10, 0)); 
+let activeDate = new Date(); // Default to today's date --> new Date();
+console.log('Active Date: ',activeDate.toISOString());
+let datepicker;
 const goButton = document.getElementById('goButton');
 const thumbSelect = document.getElementById('thumb');
 const imageGrid = document.getElementById('imageGrid');
@@ -21,7 +22,8 @@ const fallbackImage = `./images/noimage.png`;
 
 // Initialize Air Datepicker
 document.addEventListener('DOMContentLoaded', function () {
-    const datepicker = new AirDatepicker('#cal', {
+    console.log('inside datepicker init: ',activeDate.toISOString());
+    datepicker = new AirDatepicker('#cal', {
         locale: {
             days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -35,10 +37,17 @@ document.addEventListener('DOMContentLoaded', function () {
             firstDay: 0
         },
         autoClose: true,
-        defaultDate: activeDate,
+        defaultDate: utcToLocalDate(activeDate),
         onSelect({ date }) {
-            activeDate = date; // Update activeDate when the user picks a date
-            updateImages(); // Refresh images after selecting a date
+            if (date) {
+                // Convert back from local date to UTC midnight
+                activeDate = new Date(Date.UTC(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate()
+                ));
+                updateImages();
+            }
         }
     });
 
@@ -46,12 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
 
     // Disable Next button if activeDate is Today
-    const today = new Date(); 
-    today.setHours(0, 0, 0, 0); // Normalize to midnight
-    nextButton.disabled = activeDate >= today;
+    disableNext();
 
     // Load images on page load
     updateImages(); 
+
+    // Update calendar
+    datepicker.selectDate(utcToLocalDate(activeDate), true);
 });
 
 // Function to check if an image exists by making a request
@@ -116,10 +126,10 @@ function updateImages() {
         imagePromises.push(imagePromise);
     }
 
-    // Wait for all images to load before enabling or disabling buttons
+    /*// Wait for all images to load before enabling or disabling buttons
     Promise.all(imagePromises).then(() => {
         // You can perform additional logic here if needed
-    });
+    });*/
 }
 
 function changeDate(days) {
@@ -130,27 +140,35 @@ function changeDate(days) {
     updateImages();
 
     // Check if activeDate is in the future, disable Next button
-    const today = new Date(); 
-    todayStr = today.toISOString().slice(0, 10);
-    activeDateStr = activeDate.toISOString().slice(0, 10);
-
-    // Disable Next button if newDate is today or beyond
-    nextButton.disabled = activeDateStr >= todayStr;
-
-    /*// Update activeDate and datepicker if valid
-    if (newDate <= today) {
-        activeDate = newDate;
-        document.querySelector('#cal').value = newDate.toISOString().split('T')[0];
-        updateImages();
-    }*/
+    disableNext();
+    
+    // Update calendar
+    datepicker.selectDate(utcToLocalDate(activeDate), true);
 }
 
 // Set date to today using datepicker
 function setToday() {
     activeDate = new Date();
     document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
+    datepicker.selectDate(utcToLocalDate(activeDate), true);
     nextButton.disabled = true;
     updateImages();
+}
+
+function disableNext() {
+    const today = new Date(); 
+    todayStr = today.toISOString().slice(0, 10);
+    activeDateStr = activeDate.toISOString().slice(0, 10);
+
+    nextButton.disabled = activeDateStr >= todayStr;
+}
+
+function utcToLocalDate(utcDate) {
+    return new Date(
+        utcDate.getUTCFullYear(),
+        utcDate.getUTCMonth(),
+        utcDate.getUTCDate()
+    );
 }
 
 todayButton.addEventListener('click', () => {

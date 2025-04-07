@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Full Size Image</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="air-datepicker/air-datepicker.css">
 </head>
 <body>
+
+    <!-- Air Datepicker 
+    <link href="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.js"></script>-->
+
     <div class="controls-container">
         <div class="top-row">
             <button id="prevButton">Previous</button>
-            <span id="dateDisplay"></span> <!-- Date display element -->
+            <input id="fullsizecal" type="text" value>
             <button id="nextButton">Next</button>
         </div>
         <div class="bottom-row">
@@ -18,10 +24,9 @@
         </div>
     </div>
 
-    <div class="image-container">
-        <img id="fullsizeImage" src="" alt="Full-size image">
-    </div>
+    <div id="fullsizeImageContainer" class="fullsize-image-wrapper"></div>
 
+    <script src="air-datepicker/air-datepicker.js"></script>
     <script src="js/fullsize.js"></script>
 </body>
 </html>
