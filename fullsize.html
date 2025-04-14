@@ -8,25 +8,27 @@
     <link rel="stylesheet" href="air-datepicker/air-datepicker.css">
 </head>
 <body>
-
-    <!-- Air Datepicker 
-    <link href="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.js"></script>-->
-
     <div class="controls-container">
         <div class="top-row">
+            <select id="jumpToProduct">
+                <option value="">Jump to product...</option>
+            </select>
             <button id="prevButton">Previous</button>
             <input id="fullsizecal" type="text" value>
             <button id="nextButton">Next</button>
         </div>
         <div class="bottom-row">
             <button id="backToGridButton">Back to Grid</button>
+            <button id="copyLinkButton">Copy Shareable Link</button>
         </div>
     </div>
 
-    <div id="fullsizeImageContainer" class="fullsize-image-wrapper"></div>
+    <div id="fullsizeImageContainer" class="fullsize-image-container"></div>
+
+    <div id="toast" class="toast">Link copied to clipboard!</div>
 
     <script src="air-datepicker/air-datepicker.js"></script>
-    <script src="js/fullsize.js"></script>
+    <script type="module" src="js/utils.js"></script>
+    <script type="module" src="js/fullsize.js"></script>
 </body>
 </html>

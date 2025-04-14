@@ -1,14 +1,22 @@
+import {
+    prods,
+    sourceURL,
+    fallbackImage,
+    fileext,
+    generateShareURL,
+    shareToast,
+    utcToLocalDate,
+    disableNext,
+    formatDate,
+    getStoredOrURLParam
+} from './utils.js';
+
 let datepicker;
-// Construct the image name and URL
-const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/';
-const fallbackImage = './images/noimage.png';
-const fileext = '.jpg';
-//const imageName = `${yyyy}${mm}/${yyyy}${mm}${dd}_${product}${fileext}`;
-//const imageURL = `${sourceURL}${imageName}`;
-const getImageName = (yyyy, mm, dd, product, fileext) =>
-    `${yyyy}${mm}${dd}_${product}${fileext}`;
-const getImageURL = (sourceURL, year, month, imageName) =>
-    `${sourceURL}${year}${month}/${imageName}`;
+
+const getImageName = (yyyy, mm, dd, product, ext) =>
+    `${yyyy}${mm}${dd}_${product}${ext}`;
+const getImageURL = (base, year, month, name) =>
+    `${base}${year}${month}/${name}`;
 
 document.addEventListener('DOMContentLoaded', () => {
     const prevButton = document.getElementById('prevButton');
@@ -16,28 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToGridButton = document.getElementById('backToGridButton');
     const imageContainer = document.getElementById('fullsizeImageContainer');
 
-    // Get the image parameters from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    let year = parseInt(urlParams.get('year'));
-    let month = parseInt(urlParams.get('month'));
-    let day = parseInt(urlParams.get('day'));
-    const thumb = urlParams.get('thumb');
+    const now = new Date();
+    const year = getStoredOrURLParam('year', String(now.getUTCFullYear()));
+    const month = getStoredOrURLParam('month', String(now.getUTCMonth() + 1).padStart(2, '0'));
+    const day = getStoredOrURLParam('day', String(now.getUTCDate()).padStart(2, '0'));
+    const thumb = getStoredOrURLParam('thumb', 'default-thumb');
 
-    let activeDate = new Date(Date.UTC(year, month - 1, day));
-    console.log("Page load: ", activeDate.toISOString());
 
-    // Available products
-    const prods = [
-        'CL61_TBS_03km', 'CL61_TBS_15km',
-        'CL61_LDR_03km', 'CL61_LDR_15km',
-        'CL61_SnC_03km', 'CL61_SnC_15km',
-        'LFTE_TBS_03km', 'LFTE_TBS_15km',
-        'LFTN_TBS_03km', 'LFTN_TBS_15km',
-        'LFTW_TBS_03km', 'LFTW_TBS_15km',
-        'SunScout_diag', 'SunScout_met5' 
-    ];
+    let activeDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
 
-    //// Initialize Air Datepicker
     datepicker = new AirDatepicker('#fullsizecal', {
         locale: {
             days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -55,155 +50,107 @@ document.addEventListener('DOMContentLoaded', () => {
         defaultDate: utcToLocalDate(activeDate),
         onSelect({ date }) {
             if (date) {
-                // Convert back from local date to UTC midnight
                 activeDate = new Date(Date.UTC(
                     date.getFullYear(),
                     date.getMonth(),
                     date.getDate()
                 ));
                 updateFullSizeImages();
+                const { yyyy, mm, dd } = formatDate(activeDate);
+                sessionStorage.setItem('year', yyyy);
+                sessionStorage.setItem('month', mm);
+                sessionStorage.setItem('day', dd);
             }
         }
     });
 
-    // Disable Next button if activeDate is Today
-    disableNext();
-
-    // Load images on page load
-    updateFullSizeImages();
-
-    // Update calendar
+    //updateFullSizeImages();
     document.querySelector('#fullsizecal').value = activeDate.toISOString().split('T')[0];
     datepicker.selectDate(utcToLocalDate(activeDate), true);
 
     function updateFullSizeImages() {
-        // Set calendar input value
-        document.querySelector('#fullsizecal').value = activeDate.toISOString().split('T')[0];
-
-        // Check if Next button needs to be disabled
-        disableNext();
-
-        // Clear current images
-        imageContainer.innerHTML = '';
-
         const { yyyy, mm, dd } = formatDate(activeDate);
 
+        disableNext(nextButton, activeDate);
+        imageContainer.innerHTML = '';
+    
         prods.forEach(product => {
             const imageName = getImageName(yyyy, mm, dd, product, fileext);
-            const imageURL = getImageURL(sourceURL, yyyy, mm, imageName); // <== fixed here
-        
-            // Create container
-            const imagePackage = document.createElement('div');
-            imagePackage.id = product;
-            imagePackage.className = 'fullsize-image-package';
-        
-            // Preload image first
+            const imageURL = getImageURL(sourceURL, yyyy, mm, imageName);
+    
+            // Wrapper div for each image (with anchor ID)
+            const wrapper = document.createElement('div');
+            wrapper.className = 'fullsize-image-wrapper';
+            wrapper.id = product; // ← enables #anchor scrolling
+    
+            // Image element
+            const img = document.createElement('img');
+            img.alt = `${product} image`;
+            img.className = 'fullsizeImage';
+    
+            // Link around image
+            const link = document.createElement('a');
+            link.href = imageURL;
+            link.target = '_blank';
+            link.appendChild(img);
+    
+            wrapper.appendChild(link);
+            imageContainer.appendChild(wrapper);
+    
+            // Load image with fallback
             const tempImg = new Image();
             tempImg.onload = () => {
-                const img = document.createElement('img');
                 img.src = imageURL;
-                img.alt = `${product} image`;
-                img.className = 'fullsizeImage';
-
-                const link = document.createElement('a');
-                link.href = imageURL;
-                link.target = '_blank';
-                link.appendChild(img);
-
-                const imagePackage = document.createElement('div');
-                imagePackage.id = product;
-                imagePackage.className = 'fullsize-image-package';
-                imagePackage.appendChild(link);
-
-                imageContainer.appendChild(imagePackage);
             };
-
             tempImg.onerror = () => {
-                const img = document.createElement('img');
                 img.src = fallbackImage;
-                img.alt = `${product} image`;
-                img.className = 'fullsizeImage';
-
-                const link = document.createElement('a');
                 link.href = fallbackImage;
-                link.target = '_blank';
-                link.appendChild(img);
-
-                const imagePackage = document.createElement('div');
-                imagePackage.id = product;
-                imagePackage.className = 'fullsize-image-package';
-                imagePackage.appendChild(link);
-
-                imageContainer.appendChild(imagePackage);
             };
-
             tempImg.src = imageURL;
         });
-        
-        console.log("After updateFullSizeImages: ", activeDate.toISOString());
-    }
-
-    function formatDate(date) {
-        const yyyy = date.getUTCFullYear();
-        const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const dd = String(date.getUTCDate()).padStart(2, '0');
-        console.log("After formatDate: ", activeDate.toISOString());
-        return { yyyy, mm, dd };
     }
 
     function changeDate(days) {
-        var newDate = new Date(activeDate);
-        newDate.setDate(activeDate.getDate() + days);
-        activeDate = newDate;
-        console.log(activeDate.toISOString());
-    
-        // Check if activeDate is in the future, disable Next button
-        disableNext();
-        
-        // Update calendar
-        document.querySelector('#fullsizecal').value = activeDate.toISOString().split('T')[0];
-        console.log("Change Date: ", activeDate.toISOString());
-        datepicker.selectDate(utcToLocalDate(activeDate), true);
-
-        updateFullSizeImages();
-        updateURL();
-    }
-
-    function utcToLocalDate(utcDate) {
-        return new Date(
-            utcDate.getUTCFullYear(),
-            utcDate.getUTCMonth(),
-            utcDate.getUTCDate()
-        );
-    }
-
-    function disableNext() {
-        const today = new Date(); 
-        todayStr = today.toISOString().slice(0, 10);
-        activeDateStr = activeDate.toISOString().slice(0, 10);
-    
-        nextButton.disabled = activeDateStr >= todayStr;
-    }
-
-    prevButton.addEventListener('click', () => {
-        const increment = 1;
-        changeDate(-increment);
-    });
-    
-    nextButton.addEventListener('click', () => {
-        const increment = 1;
-        changeDate(increment);
-    });
-
-    function updateURL() {
+        activeDate.setUTCDate(activeDate.getUTCDate() + days);
         const { yyyy, mm, dd } = formatDate(activeDate);
-        const newParams = `year=${yyyy}&month=${mm}&day=${dd}&thumb=${encodeURIComponent(thumb)}`;
-        window.history.replaceState(null, '', `fullsize.html?${newParams}`);
+        sessionStorage.setItem('year', yyyy);
+        sessionStorage.setItem('month', mm);
+        sessionStorage.setItem('day', dd);
+        disableNext(nextButton, activeDate);
+        document.querySelector('#fullsizecal').value = activeDate.toISOString().split('T')[0];
+        datepicker.selectDate(utcToLocalDate(activeDate), true);
+        updateFullSizeImages();
     }
+
+    prevButton.addEventListener('click', () => changeDate(-1));
+    nextButton.addEventListener('click', () => changeDate(1));
 
     backToGridButton.addEventListener('click', () => {
         const { yyyy, mm, dd } = formatDate(activeDate);
-        window.location.href = `index.html?year=${yyyy}&month=${mm}&day=${dd}`;
+        window.location.href = `index.html?year=${yyyy}&month=${mm}&day=${dd}&thumb=${encodeURIComponent(thumb)}`;
+    });
+
+    document.getElementById('copyLinkButton').addEventListener('click', () => {
+        const thumb = sessionStorage.getItem('thumb') || 'default-thumb';
+        const shareURL = generateShareURL(activeDate, thumb);
+    
+        navigator.clipboard.writeText(shareURL)
+            .then(() => shareToast('✅ Link copied to clipboard'))
+            .catch(err => console.error('Failed to copy link: ', err));
     });
 
 });
+function waitForAnchorAndScroll(anchorId, retries = 20) {
+    if (retries <= 0) return;
+    const el = document.getElementById(anchorId);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        requestAnimationFrame(() => waitForAnchorAndScroll(anchorId, retries - 1));
+    }
+}
+
+const anchor = window.location.hash?.substring(1);
+if (anchor) {
+    waitForAnchorAndScroll(anchor);
+}
