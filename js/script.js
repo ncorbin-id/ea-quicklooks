@@ -1,7 +1,19 @@
-// Ensure the required elements are present
-let activeDate = new Date(Date.UTC(2024, 9, 13, 0, 10, 0)); 
-// let activeDate = new Date(); // Default to today's date --> new Date();
-// console.log('Active Date: ',activeDate.toISOString());
+import {
+    prods,
+    sourceURL,
+    fallbackImage,
+    fileext,
+    generateShareURL,
+    shareToast,
+    utcToLocalDate,
+    disableNext,
+    formatDate,
+    getStoredOrURLParam
+} from './utils.js';
+
+let activeDate;
+let datepicker;
+
 const goButton = document.getElementById('goButton');
 const thumbSelect = document.getElementById('thumb');
 const imageGrid = document.getElementById('imageGrid');
@@ -10,18 +22,26 @@ const nextButton = document.getElementById('nextButton');
 const todayButton = document.getElementById('todayButton');
 const incrementSelect = document.getElementById('increment');
 
-// Set the base URL for images
-const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/'; 
-const fileext = '.jpg';
-const getThumbImageName = (year, month, day, thumb, fileext) =>
-    `thumbnail_tbs_${year}${month}${day}_${thumb}${fileext}`;
-const getThumbnailURL = (sourceURL, year, month, imageName) =>
-    `${sourceURL}${year}${month}/${imageName}`;
-const fallbackImage = `./images/noimage.png`;
+const getThumbImageName = (year, month, day, thumb, ext) =>
+    `thumbnail_tbs_${year}${month}${day}_${thumb}${ext}`;
+const getThumbnailURL = (sourceURL, year, month, name) =>
+    `${sourceURL}${year}${month}/${name}`;
 
-// Initialize Air Datepicker
-document.addEventListener('DOMContentLoaded', function () {
-    const datepicker = new AirDatepicker('#cal', {
+// Initialize from session or URL
+const now = new Date();
+const year = getStoredOrURLParam('year', String(now.getUTCFullYear()));
+const month = getStoredOrURLParam('month', String(now.getUTCMonth() + 1).padStart(2, '0'));
+const day = getStoredOrURLParam('day', String(now.getUTCDate()).padStart(2, '0'));
+const storedThumb = getStoredOrURLParam('thumb', thumbSelect.value);
+thumbSelect.value = storedThumb;
+sessionStorage.setItem('thumb', storedThumb);
+
+
+activeDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
+
+// Initialize Datepicker
+document.addEventListener('DOMContentLoaded', () => {
+    datepicker = new AirDatepicker('#cal', {
         locale: {
             days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -35,138 +55,97 @@ document.addEventListener('DOMContentLoaded', function () {
             firstDay: 0
         },
         autoClose: true,
-        defaultDate: activeDate,
+        defaultDate: utcToLocalDate(activeDate),
         onSelect({ date }) {
-            activeDate = date; // Update activeDate when the user picks a date
-            updateImages(); // Refresh images after selecting a date
+            if (date) {
+                activeDate = new Date(Date.UTC(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate()
+                ));
+                updateImages();
+                sessionStorage.setItem('year', formatDate(activeDate).yyyy);
+                sessionStorage.setItem('month', formatDate(activeDate).mm);
+                sessionStorage.setItem('day', formatDate(activeDate).dd);
+            }
         }
     });
 
-    // Set default date to activeDate (default is Today)
     document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
-
-    // Disable Next button if activeDate is Today
-    const today = new Date(); 
-    today.setHours(0, 0, 0, 0); // Normalize to midnight
-    nextButton.disabled = activeDate >= today;
-
-    // Load images on page load
-    updateImages(); 
+    disableNext(nextButton, activeDate);
+    updateImages();
+    datepicker.selectDate(utcToLocalDate(activeDate), true);
 });
 
-// Function to check if an image exists by making a request
-function imageExists(url, callback) {
-    const img = new Image();
-    img.onload = () => callback(true);
-    img.onerror = () => callback(false);
-    img.src = url;
-}
-
-// Function to update images based on selected date
 function updateImages() {
     const thumb = thumbSelect.value;
-    imageGrid.innerHTML = ''; // Clears existing images
+    imageGrid.innerHTML = '';
 
+    const { yyyy, mm, dd } = formatDate(activeDate);
     const startDate = activeDate;
-    const imagePromises = [];
 
     for (let i = 0; i < 36; i++) {
-        // Get date as strings for URL construction
         const date = new Date(startDate);
-        date.setDate(startDate.getDate() - (35 - i)); 
+        date.setUTCDate(startDate.getUTCDate() - (35 - i));
 
-        // console.log(date.toISOString()); 
-        const year = String(date.getUTCFullYear());
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
+        const y = String(date.getUTCFullYear());
+        const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const d = String(date.getUTCDate()).padStart(2, '0');
 
-        // Thumbnail URL construction
-        const thumbImageName = getThumbImageName(year, month, day, thumb, fileext);
-        const thumbnailURL = getThumbnailURL(sourceURL, year, month, thumbImageName);
+        const thumbName = getThumbImageName(y, m, d, thumb, fileext);
+        const thumbURL = getThumbnailURL(sourceURL, y, m, thumbName);
+        const anchor = thumb.includes('03km') ? 'CL61_TBS_03km' : 'CL61_TBS_15km';
 
-        // Create image element
         const img = document.createElement('img');
         img.alt = `Thumbnail ${i}`;
+        img.onerror = () => img.src = fallbackImage;
 
-        // Set error handler for fallback if initial loading fails
-        img.onerror = function () {
-            this.onerror = null; // Prevent infinite fallback loop
-            this.src = fallbackImage;
-        };
-
-        // Create grid item
-        const gridItem = document.createElement('div');
-        gridItem.className = 'grid-item';
-
-        // Create link
         const link = document.createElement('a');
-        link.href = `fullsize.html?thumb=${thumb}&year=${year}&month=${month}&day=${day}`;
+        link.href = `fullsize.html?thumb=${thumb}&year=${y}&month=${m}&day=${d}#${anchor}`;
         link.appendChild(img);
 
-        gridItem.appendChild(link);
-        imageGrid.appendChild(gridItem);
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.appendChild(link);
+        imageGrid.appendChild(item);
 
-        const imagePromise = new Promise((resolve) => {
-            imageExists(thumbnailURL, (exists) => {
-                img.src = exists ? thumbnailURL : fallbackImage;
-                resolve();
-            });
-        });
-
-        imagePromises.push(imagePromise);
+        img.src = thumbURL;
     }
 
-    // Wait for all images to load before enabling or disabling buttons
-    Promise.all(imagePromises).then(() => {
-        // You can perform additional logic here if needed
-    });
+    disableNext(nextButton, activeDate);
 }
 
 function changeDate(days) {
-    var newDate = new Date(activeDate);
-    newDate.setDate(activeDate.getDate() + days);
-    activeDate = newDate;
+    activeDate.setUTCDate(activeDate.getUTCDate() + days);
     document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
+    datepicker.selectDate(utcToLocalDate(activeDate), true);
     updateImages();
 
-    // Check if activeDate is in the future, disable Next button
-    const today = new Date(); 
-    todayStr = today.toISOString().slice(0, 10);
-    activeDateStr = activeDate.toISOString().slice(0, 10);
-
-    // Disable Next button if newDate is today or beyond
-    nextButton.disabled = activeDateStr >= todayStr;
-
-    /*// Update activeDate and datepicker if valid
-    if (newDate <= today) {
-        activeDate = newDate;
-        document.querySelector('#cal').value = newDate.toISOString().split('T')[0];
-        updateImages();
-    }*/
+    const { yyyy, mm, dd } = formatDate(activeDate);
+    sessionStorage.setItem('year', yyyy);
+    sessionStorage.setItem('month', mm);
+    sessionStorage.setItem('day', dd);
 }
 
-// Set date to today using datepicker
 function setToday() {
     activeDate = new Date();
-    document.querySelector('#cal').value = activeDate.toISOString().split('T')[0];
-    nextButton.disabled = true;
-    updateImages();
+    activeDate.setUTCHours(0, 0, 0, 0);
+    changeDate(0);
 }
 
-todayButton.addEventListener('click', () => {
-    setToday();
-});
-
-prevButton.addEventListener('click', () => {
-    const increment = parseInt(incrementSelect.value, 10);
-    changeDate(-increment); // Move back by the selected increment
-});
-
-nextButton.addEventListener('click', () => {
-    const increment = parseInt(incrementSelect.value, 10);
-    changeDate(increment); // Move forward by the selected increment
-});
-
+todayButton.addEventListener('click', setToday);
+prevButton.addEventListener('click', () => changeDate(-parseInt(incrementSelect.value, 10)));
+nextButton.addEventListener('click', () => changeDate(parseInt(incrementSelect.value, 10)));
 thumbSelect.addEventListener('change', () => {
-    updateImages(); // Refresh images when thumbnail selection changes
+    sessionStorage.setItem('thumb', thumbSelect.value);
+    updateImages();
+});
+
+document.getElementById('copyLinkButton').addEventListener('click', () => {
+    const thumb = sessionStorage.getItem('thumb');
+    const shareURL = generateShareURL(activeDate, thumb);
+
+    navigator.clipboard.writeText(shareURL)
+        .then(() => shareToast('✅ Link copied to clipboard'))
+        .catch(err => console.error('Failed to copy link: ', err));
 });

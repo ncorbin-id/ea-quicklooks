@@ -15,6 +15,11 @@ body, html {
     flex-direction: column; /* Stack rows vertically */
     align-items: center; /* Center content horizontally */
     gap: 10px; /* Space between rows */
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #f0f0f0;
 }
 
 .top-row, .bottom-row {
@@ -27,7 +32,7 @@ body, html {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* 6 columns */
     gap: 3px; /* Gap between grid items */
-    margin-top: 20px; /* Adjust margin as needed */
+    margin-top: 70px; /* Adjust margin as needed */
 }
 
 .grid-item {
@@ -69,4 +74,55 @@ body, html {
     border: 2px solid #ddd;
     border-radius: 5px;
     object-fit: contain; /* Preserve aspect ratio */
+}
+
+/* fullsize pages */
+.fullsize-image-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr); 
+    gap: 3px; /* Gap between grid items */
+    margin-top: 70px; /* Adjust margin as needed */
+}
+
+.fullsize-image-wrapper {
+    display: flex;
+    scroll-margin-top: 100px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* spacing between images */
+    padding: 5px;
+}
+
+.fullsizeImage {
+    display: block; 
+    width: 80vw;
+    max-width: 1000px; /* optional max width */
+    height: auto;
+    border: 10px solid #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.toast {
+    visibility: hidden;
+    min-width: 220px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 12px 16px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.5s ease, bottom 0.5s ease;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px;
 }
