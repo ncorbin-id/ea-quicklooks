@@ -98,7 +98,12 @@ function updateImages() {
 
         const img = document.createElement('img');
         img.alt = `Thumbnail ${i}`;
-        img.onerror = () => img.src = fallbackImage;
+
+        // Set error handler for fallback if initial loading fails
+        img.onerror = function () {
+            this.onerror = null; // Prevent infinite fallback loop
+            this.src = fallbackImage;
+        };
 
         const link = document.createElement('a');
         link.href = `fullsize.html?thumb=${thumb}&year=${y}&month=${m}&day=${d}#${anchor}`;
