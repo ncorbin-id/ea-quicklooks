@@ -94,6 +94,7 @@ function updateImages() {
 
         const thumbName = getThumbImageName(y, m, d, thumb, fileext);
         const thumbURL = getThumbnailURL(sourceURL, y, m, thumbName);
+        console.log('Looking for thumbnail URL: ', thumbURL)
         const anchor = thumb.includes('03km') ? 'CL61_TBS_03km' : 'CL61_TBS_15km';
 
         const img = document.createElement('img');

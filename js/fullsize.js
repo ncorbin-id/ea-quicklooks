@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         prods.forEach(product => {
             const imageName = getImageName(yyyy, mm, dd, product, fileext);
             const imageURL = getImageURL(sourceURL, yyyy, mm, imageName);
+            console.log('Looking for image URL: ', imageURL)
     
             // Wrapper div for each image (with anchor ID)
             const wrapper = document.createElement('div');
