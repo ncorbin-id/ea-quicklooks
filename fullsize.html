@@ -9,23 +9,23 @@
 </head>
 <body>
 
-    <div class="sidebar-controls-container">
-        <div class="top-row">
-            <select id="jumpToProduct">
-                <option value="">Jump to product...</option>
-            </select>
+    <div id="sidebarControlsContainer" class="sidebar-controls-container">
+        <button class="closebtn" id="toggleBtn" title="Toggle Product Control Menu">»</button>
+        <button class="menuItem" id="copyLinkButton">Copy Shareable Link</button>
+        <select class="menuItem" id="jumpToProduct">
+            <option value="">Jump to product...</option>
+        </select>
+    </div>
+
+    <div id="fullsizeMainContainer" class="fullsize-main-container">
+        <div id ="dateControlContainer" class="date-controls-container">
+            <button id="backToGridButton">Back to Grid</button>
             <button id="prevButton">Previous</button>
             <input id="fullsizecal" type="text" value>
             <button id="nextButton">Next</button>
         </div>
-        <div class="bottom-row">
-            <button id="backToGridButton">Back to Grid</button>
-            <button id="copyLinkButton">Copy Shareable Link</button>
-        </div>
-    </div>
-
-    <div id="fullsizeImageContainer" class="fullsize-image-container">
         
+        <div id="fullsizeImageContainer" class="fullsize-image-container"></div>
     </div>
 
     <div id="toast" class="toast">Link copied to clipboard!</div>

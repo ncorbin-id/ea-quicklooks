@@ -78,13 +78,38 @@ body, html {
 
 /* fullsize pages */
 
-/* HTML container */
-.fullsize-image-container {
+:root {
+--sidebar-width: 40px;
+}
+
+.sidebar-controls-container.open {
+--sidebar-width: 200px;
+}
+
+/* main image and date controls container */
+.fullsize-main-container {
     display: grid;
     grid-template-columns: repeat(1, 1fr); 
     gap: 3px; /* Gap between grid items */
+    transition: margin-left 0.5s;
+    padding: 16px;
+    margin-left: var(--sidebar-width);
     margin-top: 70px; /* Adjust margin as needed */
-    /* for sidebar margin-left: 20%; */
+}
+
+.date-controls-container {
+    margin-top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width); /* align with main container */
+    width: calc(100% - var(--sidebar-width));
+    background-color: #f0f0f0;
+    transition: left 0.5s, width 0.5s;
 }
 
 /* individual image containers */
@@ -110,32 +135,55 @@ body, html {
 }
 
 .sidebar-controls-container {
-    /* LEFT SIDEBAR
-    width: 20%;
-    min-width: 200px;
-    background-color: #e8e8e8;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    height: 100%;
+    width: 40px; /* Closed state width */
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
-    height: 100vh;
-    z-index: 100; */
+    /* background-color: #111; */
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px; 
+}
 
-    /* TOP MENU */
-    margin-top: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    position: fixed;
+.sidebar-controls-container.open {
+    width: 200px;
+}
+
+.sidebar-controls-container a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar-controls-container a:hover {
+    color: #f1f1f1;
+}
+
+.sidebar-controls-container .closebtn {
+    position: absolute; 
     top: 0;
-    width: 100%;
-    background-color: #f0f0f0;
+    right: 0;
+    font-size: 32px;
+    margin-left: 0;
+    padding: 5px 10px;
+    color: #000;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.sidebar-controls-container:not(.open) .menuItem {
+    display: none;
+}
+
+.menuItem {
+    margin-left: 10px;
+    width: 150px;
 }
 
 .toast {

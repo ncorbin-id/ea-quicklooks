@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         prods.forEach(product => {
             const imageName = getImageName(yyyy, mm, dd, product, fileext);
             const imageURL = getImageURL(sourceURL, yyyy, mm, imageName);
-            console.log('Looking for image URL: ', imageURL)
+            // console.log('Looking for image URL: ', imageURL)
     
             // Wrapper div for each image (with anchor ID)
             const wrapper = document.createElement('div');
@@ -165,7 +165,7 @@ if (selectProd) {
         selectProd.appendChild(option);
     });
 
-    // 🆕 Add event listener to scroll to anchor
+    // Add event listener to scroll to anchor
     selectProd.addEventListener('change', (e) => {
         const selected = e.target.value;
         if (selected) {
@@ -176,3 +176,26 @@ if (selectProd) {
         }
     });
 }
+
+// sidebar nav
+let sidebarState = "closed";
+
+function toggleNav() {
+    const sidebar = document.getElementById("sidebarControlsContainer");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const root = document.documentElement; // reference to :root
+
+    if (sidebarState === "closed") {
+        sidebar.classList.add("open");
+        root.style.setProperty('--sidebar-width', '200px');
+        toggleBtn.innerHTML = "«"; // left arrow for open
+        sidebarState = "open";
+    } else {
+        sidebar.classList.remove("open");
+        root.style.setProperty('--sidebar-width', '40px');
+        toggleBtn.innerHTML = "»"; // right arrow for closed
+        sidebarState = "closed";
+    }
+}
+
+document.getElementById("toggleBtn").addEventListener("click", toggleNav);
