@@ -155,3 +155,24 @@ const anchor = window.location.hash?.substring(1);
 if (anchor) {
     waitForAnchorAndScroll(anchor);
 }
+
+const selectProd = document.getElementById('jumpToProduct');
+if (selectProd) {
+    prods.forEach(prod => {
+        const option = document.createElement('option');
+        option.value = prod;
+        option.textContent = prod;
+        selectProd.appendChild(option);
+    });
+
+    // 🆕 Add event listener to scroll to anchor
+    selectProd.addEventListener('change', (e) => {
+        const selected = e.target.value;
+        if (selected) {
+            const anchorEl = document.getElementById(selected);
+            if (anchorEl) {
+                anchorEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+}
