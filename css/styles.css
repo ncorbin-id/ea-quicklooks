@@ -9,6 +9,11 @@ body, html {
     align-content: center; /* Center content vertically */
 }
 
+h3 {
+    font-size: 12px;
+    text-align: left;
+}
+
 .controls-container {
     margin-top: 0px; /* Adjust margin as needed */
     display: flex;
@@ -145,6 +150,7 @@ body, html {
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px; 
+    padding-left: 10px;
 }
 
 .sidebar-controls-container.open {
@@ -180,11 +186,79 @@ body, html {
 .sidebar-controls-container:not(.open) .menuItem {
     display: none;
 }
+.sidebar-controls-container:not(.open) .toggle-container {
+    display: none;
+}
 
 .menuItem {
-    margin-left: 10px;
+    margin: 10px;
     width: 150px;
 }
+
+/* Product Toggles */
+.toggle-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;  /* or specific width if needed */
+    margin-top: 4px;
+    gap: 8px;
+  }
+
+.toggle-label {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 15px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 15px; /* Matches height for pill shape */
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 11px;      /* Scaled knob size */
+    width: 11px;
+    left: 2px;         /* Slight margin inside track */
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(20px); /* (width) - (knob) - (left*right margins) */
+  }
+  
 
 .toast {
     visibility: hidden;

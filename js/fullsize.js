@@ -12,6 +12,7 @@ import {
 } from './utils.js';
 
 let datepicker;
+let activeProds = new Set(prods);
 
 const getImageName = (yyyy, mm, dd, product, ext) =>
     `${yyyy}${mm}${dd}_${product}${ext}`;
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imageContainer.innerHTML = '';
     
         prods.forEach(product => {
+            if (!activeProds.has(product)) return;
             const imageName = getImageName(yyyy, mm, dd, product, fileext);
             const imageURL = getImageURL(sourceURL, yyyy, mm, imageName);
             // console.log('Looking for image URL: ', imageURL)
@@ -140,6 +142,47 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Failed to copy link: ', err));
     });
 
+    // Sidebar Toggles
+    const container = document.getElementById('product-toggles');
+
+    prods.forEach(prod => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'toggle-container';
+    
+        const label = document.createElement('label');
+        label.className = 'toggle-label';
+        label.textContent = prod;
+    
+        const switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+    
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.checked = true;
+        input.name = prod;
+    
+        const slider = document.createElement('span');
+        slider.className = 'slider';
+    
+        switchLabel.appendChild(input);
+        switchLabel.appendChild(slider);
+    
+        wrapper.appendChild(switchLabel);
+        wrapper.appendChild(label);
+    
+        container.appendChild(wrapper);
+    
+        // Add change event listener
+        input.addEventListener('change', () => {
+            if (input.checked) {
+                activeProds.add(prod);
+            } else {
+                activeProds.delete(prod);
+            }
+        updateFullSizeImages();
+        });
+    });
+
 });
 function waitForAnchorAndScroll(anchorId, retries = 20) {
     if (retries <= 0) return;
@@ -199,3 +242,5 @@ function toggleNav() {
 }
 
 document.getElementById("toggleBtn").addEventListener("click", toggleNav);
+
+
