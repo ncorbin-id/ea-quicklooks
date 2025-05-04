@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sidebar Toggles
     const container = document.getElementById('product-toggles');
-
+    
     prods.forEach(prod => {
         const wrapper = document.createElement('div');
         wrapper.className = 'toggle-container';

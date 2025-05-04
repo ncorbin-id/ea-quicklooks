@@ -61,7 +61,7 @@ h3 {
 /* Style for images on hover */
 #imageGrid img:hover {
     /* transform: scale(1.05); */
-    border-color: #007BFF; /* Blue outline */
+    border-color: #00aeef; /* Blue outline */
 }
 
 .image-container {
@@ -146,7 +146,7 @@ h3 {
     z-index: 1;
     top: 0;
     left: 0;
-    /* background-color: #111; */
+    background-color: #f0f0f0;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px; 
@@ -202,6 +202,7 @@ h3 {
     align-items: center;
     width: 100%;  /* or specific width if needed */
     margin-top: 4px;
+    padding-left: 15px;
     gap: 8px;
   }
 
@@ -248,11 +249,11 @@ h3 {
   }
   
   input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #00aeef;
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #00aeef;
   }
   
   input:checked + .slider:before {
