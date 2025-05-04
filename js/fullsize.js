@@ -11,6 +11,8 @@ import {
     getStoredOrURLParam
 } from './utils.js';
 
+import { initializeSidebar } from './sidebar.js';
+
 let datepicker;
 let activeProds = new Set(prods);
 
@@ -65,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    //updateFullSizeImages();
     document.querySelector('#fullsizecal').value = activeDate.toISOString().split('T')[0];
     datepicker.selectDate(utcToLocalDate(activeDate), true);
 
@@ -74,6 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         disableNext(nextButton, activeDate);
         imageContainer.innerHTML = '';
+        
+        // Check if no products are active and show message if needed
+        if (activeProds.size === 0) {
+            const messageDiv = document.createElement('div');
+            messageDiv.id = 'no-products-message';
+            messageDiv.textContent = 'Select a product from the menu';
+            imageContainer.appendChild(messageDiv);
+            return;
+        }
     
         prods.forEach(product => {
             if (!activeProds.has(product)) return;
@@ -143,47 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Sidebar Toggles
-    const container = document.getElementById('product-toggles');
+    initializeSidebar(activeProds, updateFullSizeImages); 
     
-    prods.forEach(prod => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'toggle-container';
-    
-        const label = document.createElement('label');
-        label.className = 'toggle-label';
-        label.textContent = prod;
-    
-        const switchLabel = document.createElement('label');
-        switchLabel.className = 'switch';
-    
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.checked = true;
-        input.name = prod;
-    
-        const slider = document.createElement('span');
-        slider.className = 'slider';
-    
-        switchLabel.appendChild(input);
-        switchLabel.appendChild(slider);
-    
-        wrapper.appendChild(switchLabel);
-        wrapper.appendChild(label);
-    
-        container.appendChild(wrapper);
-    
-        // Add change event listener
-        input.addEventListener('change', () => {
-            if (input.checked) {
-                activeProds.add(prod);
-            } else {
-                activeProds.delete(prod);
-            }
-        updateFullSizeImages();
-        });
-    });
-
+    // Initial call to show images or "no products" message
+    updateFullSizeImages();
 });
+
 function waitForAnchorAndScroll(anchorId, retries = 20) {
     if (retries <= 0) return;
     const el = document.getElementById(anchorId);
@@ -198,49 +173,3 @@ const anchor = window.location.hash?.substring(1);
 if (anchor) {
     waitForAnchorAndScroll(anchor);
 }
-
-const selectProd = document.getElementById('jumpToProduct');
-if (selectProd) {
-    prods.forEach(prod => {
-        const option = document.createElement('option');
-        option.value = prod;
-        option.textContent = prod;
-        selectProd.appendChild(option);
-    });
-
-    // Add event listener to scroll to anchor
-    selectProd.addEventListener('change', (e) => {
-        const selected = e.target.value;
-        if (selected) {
-            const anchorEl = document.getElementById(selected);
-            if (anchorEl) {
-                anchorEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-    });
-}
-
-// sidebar nav
-let sidebarState = "closed";
-
-function toggleNav() {
-    const sidebar = document.getElementById("sidebarControlsContainer");
-    const toggleBtn = document.getElementById("toggleBtn");
-    const root = document.documentElement; // reference to :root
-
-    if (sidebarState === "closed") {
-        sidebar.classList.add("open");
-        root.style.setProperty('--sidebar-width', '200px');
-        toggleBtn.innerHTML = "«"; // left arrow for open
-        sidebarState = "open";
-    } else {
-        sidebar.classList.remove("open");
-        root.style.setProperty('--sidebar-width', '40px');
-        toggleBtn.innerHTML = "»"; // right arrow for closed
-        sidebarState = "closed";
-    }
-}
-
-document.getElementById("toggleBtn").addEventListener("click", toggleNav);
-
-
