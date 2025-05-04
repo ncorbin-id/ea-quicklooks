@@ -9,6 +9,11 @@ body, html {
     align-content: center; /* Center content vertically */
 }
 
+h3 {
+    font-size: 12px;
+    text-align: left;
+}
+
 .controls-container {
     margin-top: 0px; /* Adjust margin as needed */
     display: flex;
@@ -56,7 +61,7 @@ body, html {
 /* Style for images on hover */
 #imageGrid img:hover {
     /* transform: scale(1.05); */
-    border-color: #007BFF; /* Blue outline */
+    border-color: #00aeef; /* Blue outline */
 }
 
 .image-container {
@@ -126,12 +131,12 @@ body, html {
 .fullsizeImage {
     display: block; 
     width: 80vw;
-    max-width: 1000px; /* optional max width */
+    max-width: 1000px; 
     height: auto;
     border: 10px solid #fff;
     border-radius: 5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: margin-left .5s; /* If you want a transition effect */
+    transition: margin-left .5s; 
 }
 
 .sidebar-controls-container {
@@ -141,10 +146,12 @@ body, html {
     z-index: 1;
     top: 0;
     left: 0;
-    /* background-color: #111; */
+    background-color: #f0f0f0;
     overflow-x: hidden;
-    transition: 0.5s;
+    transition: 0.5s; /* controls the animation of all child elements, too */ 
+    transition-property: width, padding;
     padding-top: 60px; 
+    padding-left: 10px;
 }
 
 .sidebar-controls-container.open {
@@ -157,7 +164,6 @@ body, html {
     font-size: 25px;
     color: #818181;
     display: block;
-    transition: 0.3s;
 }
 
 .sidebar-controls-container a:hover {
@@ -169,7 +175,7 @@ body, html {
     top: 0;
     right: 0;
     font-size: 32px;
-    margin-left: 0;
+    margin-right: 15px;
     padding: 5px 10px;
     color: #000;
     background-color: transparent;
@@ -177,13 +183,105 @@ body, html {
     cursor: pointer;
 }
 
-.sidebar-controls-container:not(.open) .menuItem {
+.sidebar-controls-container:not(.open) .menuItem,
+.sidebar-controls-container:not(.open) .toggle-container,
+.sidebar-controls-container:not(.open) .toggle-divider {
     display: none;
 }
 
 .menuItem {
-    margin-left: 10px;
+    margin: 10px;
     width: 150px;
+}
+
+/* Product Toggles */
+.toggle-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%; 
+    margin-top: 4px;
+    padding-left: 15px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+.toggle-label {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 15px;
+    flex-shrink: 0; /* Prevent shrinking */
+    flex-grow: 0; /* Prevent growing */
+    transition: none; /* No transition */
+  }
+  
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+  
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 15px; /* Matches height for pill shape */
+    flex-shrink: 0;
+    flex-grow: 0;
+    transition: background-color 0.4s; /* Only transition the background color */
+    width: 35px; /* Fixed width */
+}
+  
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 11px;      /* Scaled knob size */
+    width: 11px;
+    left: 2px;         /* Slight margin inside track */
+    bottom: 2px;
+    background-color: white;
+    transition: transform 0.4s;
+    border-radius: 50%;
+}
+  
+input:checked + .slider {
+    background-color: #00aeef;
+}
+  
+input:focus + .slider {
+    box-shadow: 0 0 1px #00aeef;
+}
+  
+input:checked + .slider:before {
+    transform: translateX(20px); /* (width) - (knob) - (left*right margins) */
+}
+
+.toggle-divider {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+    width: 90%;
+}
+
+/* Message when no products are selected */
+#no-products-message {
+    width: 100%;
+    text-align: center;
+    padding: 50px 20px;
+    font-size: 18px;
+    color: #666;
+    margin: 50px auto;
+    max-width: 500px;
 }
 
 .toast {
