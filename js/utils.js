@@ -9,6 +9,10 @@ export const prods = [
     'SunScout_diag', 'SunScout_met5'
 ];
 
+export const defaultprods = [
+    'CL61_TBS_03km', 'CL61_TBS_15km', 'SunScout_met5'
+]
+
 // Image locations
 export const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/';
 export const fallbackImage = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}/images/noimage.png`;

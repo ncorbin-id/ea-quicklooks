@@ -23,14 +23,45 @@ h3 {
     padding: 20px;
     position: fixed;
     top: 0;
-    width: 100%;
+    left: 0px;
+    width: 100vw;
     background-color: #f0f0f0;
+}
+
+.controls-container.with-sidebar {
+    left: var(--sidebar-width);
+    width: calc(100vw - var(--sidebar-width));
+    transition: left 0.5s, width 0.5s;
 }
 
 .top-row, .bottom-row {
     display: flex;
-    align-items: center; /* Align items vertically */
+    align-items: center; 
+    justify-content: center;
+    overflow: visible;
     gap: 10px; /* Space between items */
+}
+
+.logo {
+    position: absolute;
+    left: 20px;
+    height: 40px;
+    margin-right: 10px; 
+    margin-top: -10px; 
+    z-index: 1;
+    top: 20px;
+}
+
+.logotitle {
+    font-size: 12px;
+    text-align: left;
+    position: absolute;
+    left: 20px;
+    top: 55px;
+    width: 200px;
+    margin-right: 10px; 
+    margin-top: -10px; 
+    z-index: 1;
 }
 
 .grid-container {
@@ -84,11 +115,11 @@ h3 {
 /* fullsize pages */
 
 :root {
---sidebar-width: 40px;
+    --sidebar-width: 200px;
 }
 
 .sidebar-controls-container.open {
---sidebar-width: 200px;
+    --sidebar-width: 200px;
 }
 
 /* main image and date controls container */
@@ -100,21 +131,6 @@ h3 {
     padding: 16px;
     margin-left: var(--sidebar-width);
     margin-top: 70px; /* Adjust margin as needed */
-}
-
-.date-controls-container {
-    margin-top: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: var(--sidebar-width); /* align with main container */
-    width: calc(100% - var(--sidebar-width));
-    background-color: #f0f0f0;
-    transition: left 0.5s, width 0.5s;
 }
 
 /* individual image containers */

@@ -1,10 +1,12 @@
 // sidebar.js
 
-console.log('Loading from sidebar.js');
-
-import { prods } from './utils.js';
+import { prods, defaultprods } from './utils.js';
 
 export function initializeSidebar(activeProds, updateCallback) {
+    // Reset activeProds to just the default ones
+    activeProds.clear();
+    defaultprods.forEach(prod => activeProds.add(prod));
+
     // Initialize Jump To Product dropdown
     initializeJumpToProductMenu();
     
@@ -59,8 +61,6 @@ export function initializeSidebar(activeProds, updateCallback) {
         // Show/hide no products message
         showNoProductsMessageIfNeeded(activeProds);
     });
-    
-    //--//
     
     // Add a separator with proper CSS class
     const separator = document.createElement('hr');
@@ -127,7 +127,7 @@ export function initializeSidebar(activeProds, updateCallback) {
     });
 
     // Sidebar toggle button logic
-    let sidebarState = 'closed';
+    let sidebarState = 'open';
 
     function toggleNav() {
         const sidebar = document.getElementById('sidebarControlsContainer');
