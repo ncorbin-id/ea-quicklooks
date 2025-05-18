@@ -35,6 +35,9 @@ const day = getStoredOrURLParam('day', String(now.getUTCDate()).padStart(2, '0')
 const storedThumb = getStoredOrURLParam('thumb', thumbSelect.value);
 thumbSelect.value = storedThumb;
 sessionStorage.setItem('thumb', storedThumb);
+const storedIncrement = sessionStorage.getItem('increment') || incrementSelect.value;
+incrementSelect.value = storedIncrement;
+sessionStorage.setItem('increment', storedIncrement);
 
 
 activeDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
@@ -145,6 +148,9 @@ nextButton.addEventListener('click', () => changeDate(parseInt(incrementSelect.v
 thumbSelect.addEventListener('change', () => {
     sessionStorage.setItem('thumb', thumbSelect.value);
     updateImages();
+});
+incrementSelect.addEventListener('change', () => {
+    sessionStorage.setItem('increment', incrementSelect.value);
 });
 
 document.getElementById('copyLinkButton').addEventListener('click', () => {

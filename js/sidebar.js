@@ -3,9 +3,21 @@
 import { prods, defaultprods } from './utils.js';
 
 export function initializeSidebar(activeProds, updateCallback) {
-    // Reset activeProds to just the default ones
+    // Clear existing activeProds
     activeProds.clear();
-    defaultprods.forEach(prod => activeProds.add(prod));
+
+    // Check for existing session state
+    const savedToggles = sessionStorage.getItem('activeProds');
+
+    if (savedToggles) {
+        // Restore previously selected products in this session
+        const parsed = JSON.parse(savedToggles);
+        parsed.forEach(prod => activeProds.add(prod));
+    } else {
+        // First load of session: show default products
+        defaultprods.forEach(prod => activeProds.add(prod));
+        sessionStorage.setItem('activeProds', JSON.stringify([...activeProds]));
+    }
 
     // Initialize Jump To Product dropdown
     initializeJumpToProductMenu();
@@ -56,6 +68,7 @@ export function initializeSidebar(activeProds, updateCallback) {
             }
         });
         
+        sessionStorage.setItem('activeProds', JSON.stringify([...activeProds]));
         updateCallback();
         
         // Show/hide no products message
@@ -111,6 +124,8 @@ export function initializeSidebar(activeProds, updateCallback) {
                 activeProds.delete(prod);
                 updateCallback();
             }
+            // save toggles to sessionStorage
+            sessionStorage.setItem('activeProds', JSON.stringify([...activeProds]));
             // Update toggle all checkbox state
             toggleAllInput.checked = activeProds.size === prods.length;
             //updateCallback();
