@@ -100,12 +100,20 @@ export function initializeSidebar(activeProds, updateCallback) {
         input.addEventListener('change', () => {
             if (input.checked) {
                 activeProds.add(prod);
+                updateCallback();
+                setTimeout(() => {
+                    const el = document.getElementById(prod);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             } else {
                 activeProds.delete(prod);
+                updateCallback();
             }
             // Update toggle all checkbox state
             toggleAllInput.checked = activeProds.size === prods.length;
-            updateCallback();
+            //updateCallback();
         });
     });
 
@@ -160,7 +168,7 @@ function initializeJumpToProductMenu() {
         selectProd.remove(1);
     }
     
-    // Add product options
+    // Add product dropdown options
     prods.forEach(prod => {
         const option = document.createElement('option');
         option.value = prod;
