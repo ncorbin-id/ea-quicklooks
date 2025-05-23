@@ -16,7 +16,7 @@ export const defaultprods = [
 // Image locations
 export const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/';
 export const fallbackImage = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}/images/noimage.png`;
-console.log(fallbackImage);
+export const fallbackImageFS = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}/images/noimage_fullsize.png`;
 export const fileext = '.png';
 
 export function utcToLocalDate(utcDate) {

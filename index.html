@@ -9,21 +9,20 @@
 </head>
 <body>
     <div class="controls-container">
+        <a href="https://www.environmentanalytics.com">
+            <img src="https://www.environmentanalytics.com/wp-content/uploads/2018/08/cropped-Environment_Analytics_Logo_1800width_transparent-1.png" alt="Logo" class="logo">
+        </a>
         <div class="top-row">
-            <a href="https://www.environmentanalytics.com">
-                <img src="https://www.environmentanalytics.com/wp-content/uploads/2018/08/cropped-Environment_Analytics_Logo_1800width_transparent-1.png" alt="Logo" class="logo">
-            </a>
-            <p class="logotitle"><b>E</b>astern <b>C</b>arolina <b>A</b>tmospheric <b>O</b>bserving <b>S</b>ite</p>
                 <!-- Thumbnail Dropdown -->
             <label for="thumb">Thumbnail:</label>
-            <select id="thumb">
+            <select class="input-text" id="thumb">
                 <option value="03km">Backscatter, 3 km</option>
                 <option value="15km">Backscatter, 15 km</option>
             </select>
 
             <!-- Date Selection -->
             <label for="cal">Date (UTC):</label>
-            <input id="cal" type="text" value>
+            <input id="cal" type="text" class="input-text" value>
             <button id="todayButton">Today</button>
         </div>
 
@@ -33,7 +32,7 @@
 
             <!-- Increment Dropdown -->
             <label for="increment">Increment:</label>
-            <select id="increment">
+            <select class="input-text" id="increment">
                 <option value="1">1 day</option>
                 <option value="7">7 days</option>
                 <option value="30">30 days</option>

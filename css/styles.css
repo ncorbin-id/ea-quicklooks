@@ -1,37 +1,31 @@
+* {
+  box-sizing: border-box;
+}
+
 body, html {
-    margin-top: 0;
-    padding: 10px;
+    margin: 0;
+    padding: 0px;
     display: flex;
     flex-direction: column;
     background-color: #f0f0f0; /* Optional: to set a background color */
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px; /* Set the global font size */
+    font-size: clamp(12pt, 1.2vw, 24pt); /* Set the global font size */
+    justify-content: center;  /* Center content horizontally */
+    align-items: center; 
     align-content: center; /* Center content vertically */
 }
 
-h3 {
-    font-size: 12px;
-    text-align: left;
-}
-
 .controls-container {
-    margin-top: 0px; /* Adjust margin as needed */
     display: flex;
+    padding: 10px 20px 20px 20px;
+    position: sticky;
+    width: 80vw;
+    top: 0;
     flex-direction: column; /* Stack rows vertically */
     align-items: center; /* Center content horizontally */
     gap: 10px; /* Space between rows */
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0px;
-    width: 100vw;
-    background-color: #f0f0f0;
-}
-
-.controls-container.with-sidebar {
-    left: var(--sidebar-width);
-    width: calc(100vw - var(--sidebar-width));
-    transition: left 0.5s, width 0.5s;
+    background-color: inherit;
+    z-index: 1;
 }
 
 .top-row, .bottom-row {
@@ -39,49 +33,60 @@ h3 {
     align-items: center; 
     justify-content: center;
     overflow: visible;
-    gap: 10px; /* Space between items */
+    gap: clamp(10px, 0.8vw, 20px); /* Space between items */
+}
+
+button {
+    font-size: clamp(12pt, 1.2vw, 24pt);
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: transform 0.3s ease, border-color 0.3s ease; 
+    padding-left: clamp(6px, 0.8vw, 12px);
+    padding-right: clamp(6px, 0.8vw, 12px);
+}
+
+button:hover:enabled {
+    background-color: #ccc; /* Blue border on hover */
+}
+
+button:disabled {
+    cursor: default;
+}
+
+.input-text {
+    font-size: clamp(12pt, 1.2vw, 22pt);
+}
+
+.input-text option{
+    font-size: inherit;
 }
 
 .logo {
-    position: absolute;
-    left: 20px;
     height: 40px;
-    margin-right: 10px; 
-    margin-top: -10px; 
-    z-index: 1;
-    top: 20px;
-}
-
-.logotitle {
-    font-size: 12px;
-    text-align: left;
     position: absolute;
-    left: 20px;
-    top: 55px;
-    width: 200px;
-    margin-right: 10px; 
-    margin-top: -10px; 
-    z-index: 1;
+    right: 0px;
+    margin-right: 40px;
+    z-index: 1000;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 6 columns */
+    grid-template-columns: repeat(6, auto); /* 6 columns */
     gap: 3px; /* Gap between grid items */
-    margin-top: 70px; /* Adjust margin as needed */
+    width: 70vw;              /* 70% of viewport width */
+    margin: 20px auto; 
 }
 
 .grid-item {
     overflow: visible; /* Hide overflowing content */
-    border: 0px solid #ddd; /* Optional: Border for grid items */
-    position: relative; /* Ensure positioning for the border */
-    margin-right: 5px;
+    padding: 2px;
 }
 
 .grid-item img {
     display: block; /* Remove default inline-block spacing */
     width: 100%; /* Ensure image fills grid item width while maintaining aspect ratio */
-    height: 70px; /* Set the desired height */
+    height: auto; /* Set the desired height */
     object-fit: contain; /* Fit image inside the grid item without cropping */
     cursor: pointer;
     border: 2px solid #ccc;
@@ -91,16 +96,14 @@ h3 {
 
 /* Style for images on hover */
 #imageGrid img:hover {
-    /* transform: scale(1.05); */
     border-color: #00aeef; /* Blue outline */
 }
 
+/* fullsize pages */
 .image-container {
     display: flex;
     align-items: center; /* Center image vertically within container */
     justify-content: center; /* Center image horizontally within container */
-    height: 80vh; /* Adjust to desired height */
-    width: 100%; /* Full width of the viewport */
     padding: 20px; /* Add padding if needed */
 }
 
@@ -112,25 +115,20 @@ h3 {
     object-fit: contain; /* Preserve aspect ratio */
 }
 
-/* fullsize pages */
-
-:root {
-    --sidebar-width: 200px;
+.controls-container.fullsize {
+    margin-left: var(--sidebar-width, 200px);
+    transition: margin-left 0.5s;
+    background-color: inherit;
 }
 
-.sidebar-controls-container.open {
-    --sidebar-width: 200px;
-}
-
-/* main image and date controls container */
+/* main image container */
 .fullsize-main-container {
     display: grid;
     grid-template-columns: repeat(1, 1fr); 
     gap: 3px; /* Gap between grid items */
     transition: margin-left 0.5s;
     padding: 16px;
-    margin-left: var(--sidebar-width);
-    margin-top: 70px; /* Adjust margin as needed */
+    margin-left: var(--sidebar-width, 200px); 
 }
 
 /* individual image containers */
@@ -157,46 +155,35 @@ h3 {
 
 .sidebar-controls-container {
     height: 100%;
-    width: 40px; /* Closed state width */
+    min-width: 40px;
+    max-width: 60px;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #f0f0f0;
+    background-color: inherit;
     overflow-x: hidden;
     transition: 0.5s; /* controls the animation of all child elements, too */ 
-    transition-property: width, padding;
+    transition: max-width 0.9s, min-width 0.5s;
     padding-top: 60px; 
     padding-left: 10px;
 }
 
 .sidebar-controls-container.open {
-    width: 200px;
-}
-
-.sidebar-controls-container a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-}
-
-.sidebar-controls-container a:hover {
-    color: #f1f1f1;
+    max-width: 400px;
+    min-width: 200px;
 }
 
 .sidebar-controls-container .closebtn {
     position: absolute; 
     top: 0;
     right: 0;
-    font-size: 32px;
-    margin-right: 15px;
-    padding: 5px 10px;
+    font-size: clamp(32pt, 1.2vw, 64pt);
     color: #000;
     background-color: transparent;
     border: none;
     cursor: pointer;
+    padding-right: 10px;
 }
 
 .sidebar-controls-container:not(.open) .menuItem,
@@ -207,7 +194,8 @@ h3 {
 
 .menuItem {
     margin: 10px;
-    width: 150px;
+    width: 90%;
+    font-size: inherit;
 }
 
 /* Product Toggles */
@@ -223,7 +211,7 @@ h3 {
   }
 
 .toggle-label {
-    font-size: 14px;
+    font-size: inherit;
     margin-right: 10px;
   }
 
