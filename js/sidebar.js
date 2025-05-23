@@ -1,6 +1,6 @@
 // sidebar.js
 
-import { prods, defaultprods } from './utils.js';
+import { prods, prodLabels, defaultprods } from './utils.js';
 
 export function initializeSidebar(activeProds, updateCallback) {
     // Clear existing activeProds
@@ -79,7 +79,7 @@ export function initializeSidebar(activeProds, updateCallback) {
 
     // Create individual product toggles
     const productInputs = [];
-    prods.forEach(prod => {
+    prods.forEach((prod, i) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'toggle-container';
 

@@ -165,8 +165,8 @@ button:disabled {
     overflow-x: hidden;
     transition: 0.5s; /* controls the animation of all child elements, too */ 
     transition: max-width 0.9s, min-width 0.5s;
-    padding-top: 60px; 
-    padding-left: 10px;
+    padding: 60px 10px 0px 10px;
+    box-shadow: 2px 0px 40px -5px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar-controls-container.open {

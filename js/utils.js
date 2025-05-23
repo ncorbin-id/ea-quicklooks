@@ -9,6 +9,23 @@ export const prods = [
     'SunScout_diag', 'SunScout_met5'
 ];
 
+export const prodLabels = [
+    'Upward-pointing backscatter (0 - 3 km)',
+    'Upward-pointing backscatter (0 - 15 km)',
+    'Upward-pointing LDR (0 - 3 km)',
+    'Upward-pointing LDR (0 - 15 km)',
+    'Layer and Cloud Detection (0 - 3 km)',
+    'Layer and Cloud Detection (0 - 15 km)',
+    'East-pointing backscatter (0 - 3 km)',
+    'East-pointing backscatter (0 - 15 km)',
+    'North-pointing backscatter (0 - 3 km)',
+    'North-pointing backscatter (0 - 15 km)',
+    'West-pointing backscatter (0 - 3 km)',
+    'West-pointing backscatter (0 -15 km)',
+    'SunScout diagnostics',
+    'SunScout meteorology'
+]
+
 export const defaultprods = [
     'CL61_TBS_03km', 'CL61_TBS_15km', 'SunScout_met5'
 ]
