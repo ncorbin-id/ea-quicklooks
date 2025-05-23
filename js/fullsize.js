@@ -6,7 +6,7 @@
 import {
     prods,
     sourceURL,
-    fallbackImage,
+    fallbackImageFS,
     fileext,
     generateShareURL,
     shareToast,
@@ -138,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.src = imageURL;
             };
             imagePreloader.onerror = () => {
-                img.src = fallbackImage;
-                link.href = fallbackImage;
+                img.src = fallbackImageFS;
+                link.replaceWith(img);
             };
             imagePreloader.src = imageURL;
         });
@@ -189,7 +189,7 @@ function scrollToLoadedImage(anchorId, retries = 20) {
     const el = document.getElementById(anchorId);
     if (!el) {
         // Element doesn't exist yet, try again next frame
-        requestAnimationFrame(() => scrollToLoadedElement(anchorId, retries - 1));
+        requestAnimationFrame(() => scrollToLoadedImage(anchorId, retries - 1));
         return;
     }
     // Find all images inside this element

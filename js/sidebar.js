@@ -70,9 +70,6 @@ export function initializeSidebar(activeProds, updateCallback) {
         
         sessionStorage.setItem('activeProds', JSON.stringify([...activeProds]));
         updateCallback();
-        
-        // Show/hide no products message
-        showNoProductsMessageIfNeeded(activeProds);
     });
     
     // Add a separator with proper CSS class
