@@ -1,6 +1,7 @@
 // Product list
 export const prods = [
     'CL61_TBS_03km', 'CL61_TBS_15km',
+    'MRR1',
     'CL61_LDR_03km', 'CL61_LDR_15km',
     'CL61_SnC_03km', 'CL61_SnC_15km',
     'LFTE_TBS_03km', 'LFTE_TBS_15km',
@@ -10,25 +11,44 @@ export const prods = [
 ];
 
 export const prodLabels = [
-    'Upward-pointing backscatter (0 - 3 km)',
-    'Upward-pointing backscatter (0 - 15 km)',
-    'Upward-pointing LDR (0 - 3 km)',
-    'Upward-pointing LDR (0 - 15 km)',
+    'Backscatter Up (3 km)',
+    'Backscatter Up (15 km)',
+    'MRR',
+    'LDR Up (3 km)',
+    'LDR Up (15 km)',
+    'Layer and Cloud (3 km)',
+    'Layer and Cloud (15 km)',
+    'Backscatter East (3 km)',
+    'Backscatter East (15 km)',
+    'Backscatter North (3 km)',
+    'Backscatter North (15 km)',    
+    'Backscatter West (3 km)',
+    'Backscatter West (15 km)',
+    'SunScout Diagnostics',
+    'SunScout Meteorology'
+];
+
+export const tooltipLabels = [
+    'Upward-Pointing Backscatter (0 - 3 km)',
+    'Upward-Pointing Backscatter (0 - 15 km)',
+    'Micro Rain Radar',
+    'Upward-Pointing LDR (0 - 3 km)',
+    'Upward-Pointing LDR (0 - 15 km)',
     'Layer and Cloud Detection (0 - 3 km)',
     'Layer and Cloud Detection (0 - 15 km)',
-    'East-pointing backscatter (0 - 3 km)',
-    'East-pointing backscatter (0 - 15 km)',
-    'North-pointing backscatter (0 - 3 km)',
-    'North-pointing backscatter (0 - 15 km)',
-    'West-pointing backscatter (0 - 3 km)',
-    'West-pointing backscatter (0 -15 km)',
-    'SunScout diagnostics',
-    'SunScout meteorology'
-]
+    'East-Pointing Backscatter (0 - 3 km)',
+    'East-Pointing Backscatter (0 - 15 km)',
+    'North-Pointing Backscatter (0 - 3 km)',
+    'North-Pointing Backscatter (0 - 15 km)',
+    'West-Pointing Backscatter (0 - 3 km)',
+    'West-Pointing Backscatter (0 -15 km)',
+    'SunScout Diagnostics',
+    'SunScout Meteorology'
+];
 
 export const defaultprods = [
-    'CL61_TBS_03km', 'CL61_TBS_15km', 'SunScout_met5'
-]
+    'CL61_TBS_03km', 'CL61_TBS_15km', 'MRR1', 'SunScout_met5'
+];
 
 // Image locations
 export const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/';

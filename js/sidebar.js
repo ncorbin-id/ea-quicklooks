@@ -1,6 +1,6 @@
 // sidebar.js
 
-import { prods, prodLabels, defaultprods } from './utils.js';
+import { prods, prodLabels, tooltipLabels, defaultprods } from './utils.js';
 
 export function initializeSidebar(activeProds, updateCallback) {
     // Clear existing activeProds
@@ -54,7 +54,6 @@ export function initializeSidebar(activeProds, updateCallback) {
 
     container.appendChild(toggleAllWrapper);
 
-    //-- Remove if broken Toggle All functionality
     toggleAllInput.addEventListener('change', () => {
         const newState = toggleAllInput.checked;
         
@@ -77,57 +76,71 @@ export function initializeSidebar(activeProds, updateCallback) {
     separator.className = 'toggle-divider';
     container.appendChild(separator);
 
-    // Create individual product toggles
-    const productInputs = [];
-    prods.forEach((prod, i) => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'toggle-container';
+// Create individual product toggles
+const productInputs = [];
+prods.forEach((prod, i) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'toggle-container';
 
-        const label = document.createElement('label');
-        label.className = 'toggle-label';
-        label.textContent = prod;
+    const label = document.createElement('label');
+    label.className = 'toggle-label';
+    label.textContent = prodLabels[i];
 
-        const switchLabel = document.createElement('label');
-        switchLabel.className = 'switch';
+    const tooltip = document.createElement('span');
+    tooltip.className = 'tooltip';
 
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.checked = activeProds.has(prod);
-        input.name = prod;
-        productInputs.push(input); // Store reference to input for toggle all function
+    const infoIcon = document.createElement('span');
+    infoIcon.textContent = 'ℹ️';
+    tooltip.appendChild(infoIcon);
 
-        const slider = document.createElement('span');
-        slider.className = 'slider';
+    const tooltipText = document.createElement('span');
+    tooltipText.className = 'tooltiptext';
+    tooltipText.textContent = tooltipLabels[i];
+    tooltip.appendChild(tooltipText);
 
-        switchLabel.appendChild(input);
-        switchLabel.appendChild(slider);
+    label.appendChild(tooltip); 
 
-        wrapper.appendChild(switchLabel);
-        wrapper.appendChild(label);
+    const switchLabel = document.createElement('label');
+    switchLabel.className = 'switch';
 
-        container.appendChild(wrapper);
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = activeProds.has(prod);
+    input.name = prod;
+    productInputs.push(input); // Store reference to input for toggle all function
 
-        input.addEventListener('change', () => {
-            if (input.checked) {
-                activeProds.add(prod);
-                updateCallback();
-                setTimeout(() => {
-                    const el = document.getElementById(prod);
-                    if (el) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
-            } else {
-                activeProds.delete(prod);
-                updateCallback();
-            }
-            // save toggles to sessionStorage
-            sessionStorage.setItem('activeProds', JSON.stringify([...activeProds]));
-            // Update toggle all checkbox state
-            toggleAllInput.checked = activeProds.size === prods.length;
-            //updateCallback();
-        });
+    const slider = document.createElement('span');
+    slider.className = 'slider';
+
+    switchLabel.appendChild(input);
+    switchLabel.appendChild(slider);
+
+    wrapper.appendChild(switchLabel);
+    wrapper.appendChild(label); 
+
+    container.appendChild(wrapper);
+
+    input.addEventListener('change', () => {
+        if (input.checked) {
+            activeProds.add(prod);
+            updateCallback();
+            setTimeout(() => {
+                const el = document.getElementById(prod);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        } else {
+            activeProds.delete(prod);
+            updateCallback();
+        }
+        // save toggles to sessionStorage
+        sessionStorage.setItem('activeProds', JSON.stringify([...activeProds]));
+        // Update toggle all checkbox state
+        toggleAllInput.checked = activeProds.size === prods.length;
     });
+});
+
 
     // Toggle All functionality
     toggleAllInput.addEventListener('change', () => {
@@ -147,23 +160,24 @@ export function initializeSidebar(activeProds, updateCallback) {
     });
 
     // Sidebar toggle button logic
-    let sidebarState = 'open';
-
     function toggleNav() {
         const sidebar = document.getElementById('sidebarControlsContainer');
         const toggleBtn = document.getElementById('toggleBtn');
         const root = document.documentElement;
+        const isClosed = sidebar.classList.contains('close');
 
-        if (sidebarState === 'closed') {
-            sidebar.classList.add('open');
-            root.style.setProperty('--sidebar-width', '200px');
+        // Get the width values from CSS custom properties
+        const openWidth = getComputedStyle(root).getPropertyValue('--sidebar-width-open').trim();
+        const closedWidth = getComputedStyle(root).getPropertyValue('--sidebar-width-closed').trim();
+
+        if (isClosed) {
+            sidebar.classList.remove('close');
+            root.style.setProperty('--sidebar-width', openWidth);
             toggleBtn.innerHTML = '«';
-            sidebarState = 'open';
         } else {
-            sidebar.classList.remove('open');
-            root.style.setProperty('--sidebar-width', '40px');
+            sidebar.classList.add('close');
+            root.style.setProperty('--sidebar-width', closedWidth);
             toggleBtn.innerHTML = '»';
-            sidebarState = 'closed';
         }
     }
 
