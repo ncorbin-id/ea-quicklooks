@@ -153,25 +153,32 @@ button:disabled {
     transition: margin-left .5s; 
 }
 
+:root {
+  --sidebar-width-open: clamp(200px, 25vw, 500px);   /* Default/open state width */
+  --sidebar-width-closed: clamp(50px, 8vw, 80px);  /* Closed state width */
+  --sidebar-width: var(--sidebar-width-open); /* Current active width */
+}
+
 .sidebar-controls-container {
     height: 100%;
-    min-width: 40px;
-    max-width: 60px;
+    width: var(--sidebar-width);
+    max-width: clamp(200px, 40vw, 800px);
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
     background-color: inherit;
-    overflow-x: hidden;
-    transition: 0.5s; /* controls the animation of all child elements, too */ 
-    transition: max-width 0.9s, min-width 0.5s;
-    padding: 60px 10px 0px 10px;
+    overflow: visible;
+    transition: max-width 0.4s, width 0.4s;
+    padding: 80px 10px 0px 10px;
+    margin: 0 10px 10px 0;
     box-shadow: 2px 0px 40px -5px rgba(0, 0, 0, 0.5);
 }
 
-.sidebar-controls-container.open {
-    max-width: 400px;
-    min-width: 200px;
+.sidebar-controls-container.close {
+    width: var(--sidebar-width-closed);
+    max-width: var(--sidebar-width-closed);
+    min-width: var(--sidebar-width-closed);
 }
 
 .sidebar-controls-container .closebtn {
@@ -183,19 +190,35 @@ button:disabled {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    padding-right: 10px;
+    margin: 10px 10px 30px 10px;
 }
 
-.sidebar-controls-container:not(.open) .menuItem,
-.sidebar-controls-container:not(.open) .toggle-container,
-.sidebar-controls-container:not(.open) .toggle-divider {
-    display: none;
+.sidebar-controls-container.close .menuItem,
+.sidebar-controls-container.close .toggle-container,
+.sidebar-controls-container.close .toggle-divider {
+    opacity: 0;
+    transform: translateX(-20%);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
 }
 
 .menuItem {
     margin: 10px;
     width: 90%;
     font-size: inherit;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.toggle-divider {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+    width: 90%;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 /* Product Toggles */
@@ -208,6 +231,11 @@ button:disabled {
     padding-left: 15px;
     gap: 8px;
     flex-shrink: 0;
+    overflow: visible; 
+    position: relative;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
   }
 
 .toggle-label {
@@ -270,11 +298,38 @@ input:checked + .slider:before {
     transform: translateX(20px); /* (width) - (knob) - (left*right margins) */
 }
 
-.toggle-divider {
-    margin: 10px 0;
-    border: none;
-    border-top: 1px solid #ccc;
-    width: 90%;
+.tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: #00aeef;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 110%;
+  width: max-content;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #00aeef transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 
 /* Message when no products are selected */
