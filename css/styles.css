@@ -6,13 +6,14 @@ body, html {
     margin: 0;
     padding: 0px;
     display: flex;
+    overflow-x: hidden;
     flex-direction: column;
-    background-color: #f0f0f0; /* Optional: to set a background color */
+    background-color: #f0f0f0;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: clamp(12pt, 1.2vw, 24pt); /* Set the global font size */
-    justify-content: center;  /* Center content horizontally */
-    align-items: center; 
-    align-content: center; /* Center content vertically */
+    font-size: clamp(12pt, 1.2vw, 24pt);
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 .controls-container {
@@ -21,19 +22,19 @@ body, html {
     position: sticky;
     width: 80vw;
     top: 0;
-    flex-direction: column; /* Stack rows vertically */
-    align-items: center; /* Center content horizontally */
-    gap: 10px; /* Space between rows */
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     background-color: inherit;
     z-index: 1;
 }
 
 .top-row, .bottom-row {
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
     overflow: visible;
-    gap: clamp(10px, 0.8vw, 20px); /* Space between items */
+    gap: clamp(10px, 0.8vw, 20px);
 }
 
 button {
@@ -41,13 +42,13 @@ button {
     cursor: pointer;
     border: 1px solid #ccc;
     border-radius: 4px;
-    transition: transform 0.3s ease, border-color 0.3s ease; 
+    transition: transform 0.3s ease, border-color 0.3s ease;
     padding-left: clamp(6px, 0.8vw, 12px);
     padding-right: clamp(6px, 0.8vw, 12px);
 }
 
 button:hover:enabled {
-    background-color: #ccc; /* Blue border on hover */
+    background-color: #ccc;
 }
 
 button:disabled {
@@ -72,47 +73,45 @@ button:disabled {
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(6, auto); /* 6 columns */
-    gap: 3px; /* Gap between grid items */
-    width: 70vw;              /* 70% of viewport width */
-    margin: 20px auto; 
+    grid-template-columns: repeat(6, auto);
+    gap: 3px;
+    width: 70vw;
+    margin: 20px auto;
 }
 
 .grid-item {
-    overflow: visible; /* Hide overflowing content */
+    overflow: visible;
     padding: 2px;
 }
 
 .grid-item img {
-    display: block; /* Remove default inline-block spacing */
-    width: 100%; /* Ensure image fills grid item width while maintaining aspect ratio */
-    height: auto; /* Set the desired height */
-    object-fit: contain; /* Fit image inside the grid item without cropping */
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
     cursor: pointer;
     border: 2px solid #ccc;
     border-radius: 5px;
-    transition: transform 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-/* Style for images on hover */
 #imageGrid img:hover {
-    border-color: #00aeef; /* Blue outline */
+    border-color: #00aeef;
 }
 
-/* fullsize pages */
 .image-container {
     display: flex;
-    align-items: center; /* Center image vertically within container */
-    justify-content: center; /* Center image horizontally within container */
-    padding: 20px; /* Add padding if needed */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 #fullsizeImage {
-    max-width: 100%; /* Ensure image doesn't overflow container */
-    max-height: 100%; /* Ensure image doesn't exceed container height */
+    max-width: 100%;
+    max-height: 100%;
     border: 2px solid #ddd;
     border-radius: 5px;
-    object-fit: contain; /* Preserve aspect ratio */
+    object-fit: contain;
 }
 
 .controls-container.fullsize {
@@ -121,86 +120,140 @@ button:disabled {
     background-color: inherit;
 }
 
-/* main image container */
 .fullsize-main-container {
     display: grid;
-    grid-template-columns: repeat(1, 1fr); 
-    gap: 3px; /* Gap between grid items */
+    grid-template-columns: repeat(1, 1fr);
+    gap: 3px;
     transition: margin-left 0.5s;
     padding: 16px;
-    margin-left: var(--sidebar-width, 200px); 
+    margin-left: var(--sidebar-width, 200px);
 }
 
-/* individual image containers */
 .fullsize-image-wrapper {
     display: flex;
     scroll-margin-top: 100px;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* spacing between images */
+    gap: 10px;
     padding: 5px;
 }
 
-/* individual images */
 .fullsizeImage {
-    display: block; 
+    display: block;
     width: 80vw;
-    max-width: 1000px; 
+    max-width: 1000px;
     height: auto;
     border: 10px solid #fff;
     border-radius: 5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: margin-left .5s; 
+    transition: margin-left .5s;
 }
 
 :root {
-  --sidebar-width-open: clamp(200px, 25vw, 500px);   /* Default/open state width */
-  --sidebar-width-closed: clamp(50px, 8vw, 80px);  /* Closed state width */
-  --sidebar-width: var(--sidebar-width-open); /* Current active width */
+  --sidebar-width-open: clamp(200px, 22vw, 500px);
+  --sidebar-width-closed: clamp(50px, 8vw, 80px);
+  --sidebar-width: var(--sidebar-width-open);
 }
 
+/* --- SIDEBAR --- */
+
 .sidebar-controls-container {
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100%;
     width: var(--sidebar-width);
     max-width: clamp(200px, 40vw, 800px);
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: inherit;
-    overflow: visible;
-    transition: max-width 0.4s, width 0.4s;
-    padding: 80px 10px 0px 10px;
-    margin: 0 10px 10px 0;
-    box-shadow: 2px 0px 40px -5px rgba(0, 0, 0, 0.5);
-}
-
-.sidebar-controls-container.close {
-    width: var(--sidebar-width-closed);
-    max-width: var(--sidebar-width-closed);
     min-width: var(--sidebar-width-closed);
+    background-color: inherit;
+    overflow: hidden;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1), max-width 0.4s, min-width 0.4s;
+    z-index: 1;
+    box-shadow: 2px 0px 40px -5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px 10px 0;
+    padding: 0 10px 0 10px;
 }
 
+.sidebar-header-row {
+    position: relative;
+    width: 100%;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    gap: 10px;
+    z-index: 2;
+}
+
+/* Help button: left-aligned, fades out when closed */
+.help-btn {
+    position: static;
+    margin-left: 10px;
+    margin-right: auto;
+    font-size: clamp(12px, 1vw, 32px);
+    width: clamp(22px, 1vw, 48px);
+    height: clamp(22px, 1vw, 48px);
+    border-radius: 50%;
+    border: none;
+    background: #00aeef;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: background 0.2s, opacity 0.4s;
+    margin-top: 6px;
+}
+.help-btn:hover {
+    background: #007fa3;
+}
+.sidebar-controls-container.close .help-btn {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Close button: always top right, never jumps */
 .sidebar-controls-container .closebtn {
-    position: absolute; 
-    top: 0;
-    right: 0;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     font-size: clamp(32pt, 1.2vw, 64pt);
     color: #000;
     background-color: transparent;
     border: none;
     cursor: pointer;
-    margin: 10px 10px 30px 10px;
+    z-index: 1002;
+    transition: color 0.2s;
+    background: none;
+    padding: 10px;
+    padding-top: 0;
+    padding-right: 0;
+    margin: 0;
 }
 
+.sidebar-controls-container .closebtn:hover {
+    background: none;
+}
+
+/* Hide sidebar content (except close button) when closed */
 .sidebar-controls-container.close .menuItem,
-.sidebar-controls-container.close .toggle-container,
-.sidebar-controls-container.close .toggle-divider {
+.sidebar-controls-container.close .all-toggle-container,
+.sidebar-controls-container.close .product-toggle-container,
+.sidebar-controls-container.close .toggle-divider,
+.sidebar-controls-container.close .reset-order-btn {
     opacity: 0;
     transform: translateX(-20%);
     transition: opacity 0.4s ease, transform 0.4s ease;
     pointer-events: none;
 }
+
+/* --- SIDEBAR CONTENT --- */
 
 .menuItem {
     margin: 10px;
@@ -221,44 +274,88 @@ button:disabled {
     transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-/* Product Toggles */
-.toggle-container {
+.all-toggle-container {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    width: 100%; 
+    width: 100%;
     margin-top: 4px;
     padding-left: 15px;
     gap: 8px;
-    flex-shrink: 0;
-    overflow: visible; 
+    background: none;
+}
+
+.all-toggle-label {
+    font-size: inherit;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.reset-order-btn {
+    margin: 8px 0 0 0;
+    padding: 2px 10px;
+    font-size: 0.9em;
+}
+
+.product-toggle-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 4px;
+    padding-left: 0;
+    margin-right: 4px;
+    gap: 8px;
     position: relative;
-    opacity: 1;
-    transform: translateX(0);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
+    background: none;
+    width: max-content;
+}
+
+.product-toggle-label {
+    font-size: inherit;
+    margin-right: 10px;
+    flex: 1 1 auto;
+}
+
+.drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    margin-right: 2px;
+    color: #888;
+    font-size: 18px;
+    cursor: grab;
+    user-select: none;
+    transition: color 0.2s;
+}
+.drag-handle:active {
+    color: #00aeef;
+    cursor: grabbing;
+}
+.product-toggle-container:active .drag-handle {
+    color: #00aeef;
+}
 
 .toggle-label {
     font-size: inherit;
     margin-right: 10px;
-  }
+}
 
 .switch {
     position: relative;
     display: inline-block;
     width: 35px;
     height: 15px;
-    flex-shrink: 0; /* Prevent shrinking */
-    flex-grow: 0; /* Prevent growing */
-    transition: none; /* No transition */
-  }
-  
+    flex-shrink: 0;
+    flex-grow: 0;
+    transition: none;
+}
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
-  
 .slider {
     position: absolute;
     cursor: pointer;
@@ -267,72 +364,58 @@ button:disabled {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    border-radius: 15px; /* Matches height for pill shape */
+    border-radius: 15px;
     flex-shrink: 0;
     flex-grow: 0;
-    transition: background-color 0.4s; /* Only transition the background color */
-    width: 35px; /* Fixed width */
+    transition: background-color 0.4s;
+    width: 35px;
 }
-  
 .slider:before {
     position: absolute;
     content: "";
-    height: 11px;      /* Scaled knob size */
+    height: 11px;
     width: 11px;
-    left: 2px;         /* Slight margin inside track */
+    left: 2px;
     bottom: 2px;
     background-color: white;
     transition: transform 0.4s;
     border-radius: 50%;
 }
-  
 input:checked + .slider {
     background-color: #00aeef;
 }
-  
 input:focus + .slider {
     box-shadow: 0 0 1px #00aeef;
 }
-  
 input:checked + .slider:before {
-    transform: translateX(20px); /* (width) - (knob) - (left*right margins) */
+    transform: translateX(20px);
 }
 
 .tooltip {
   position: relative;
   display: inline-block;
-  margin-left: 10px;
+  vertical-align: middle;
 }
-
 .tooltip .tooltiptext {
   visibility: hidden;
-  background-color: #00aeef;
-  color: #fff;
+  opacity: 0;
+  position: fixed;
+  pointer-events: none;
+  background-color: #ccc;
   text-align: center;
   border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  top: -5px;
-  left: 110%;
+  padding: 6px;
+  z-index: 10000;
   width: max-content;
+  white-space: pre-line;
+  transition: opacity 0.15s;
+  font-size: inherit;
 }
-
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent #00aeef transparent transparent;
-}
-.tooltip:hover .tooltiptext {
+.tooltip.show-tooltip .tooltiptext {
   visibility: visible;
+  opacity: 1;
 }
 
-/* Message when no products are selected */
 #no-products-message {
     width: 100%;
     text-align: center;
@@ -360,9 +443,45 @@ input:checked + .slider:before {
     opacity: 0;
     transition: opacity 0.5s ease, bottom 0.5s ease;
 }
-
 .toast.show {
     visibility: visible;
     opacity: 1;
     bottom: 50px;
 }
+
+/* Modal styles */
+.help-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+}
+.help-modal-content {
+    background: #fff;
+    margin: auto;
+    padding: 2em 2.5em;
+    border-radius: 10px;
+    max-width: 600px;
+    font-size: clamp(14px, 1.2vw, 22px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    position: relative;
+}
+.help-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: clamp(24px, 2vw, 36px);
+    color: #00aeef;
+    cursor: pointer;
+    font-weight: bold;
+}
+.help-modal-content ul {
+    padding-left: 1.2em;
+}
+
+
+
+

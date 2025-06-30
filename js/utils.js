@@ -1,4 +1,8 @@
 // Product list
+// IMPORTANT: If you change the product list, you must also 
+// update the product labels and tooltip labels arrays accordingly.
+// 
+// Create any new product bundles in the prodBundles object.
 export const prods = [
     'CL61_TBS_03km', 'CL61_TBS_15km',
     'MRR1',
@@ -21,7 +25,7 @@ export const prodLabels = [
     'Backscatter East (3 km)',
     'Backscatter East (15 km)',
     'Backscatter North (3 km)',
-    'Backscatter North (15 km)',    
+    'Backscatter North (15 km)',
     'Backscatter West (3 km)',
     'Backscatter West (15 km)',
     'SunScout Diagnostics',
@@ -46,9 +50,27 @@ export const tooltipLabels = [
     'SunScout Meteorology'
 ];
 
+// default products
 export const defaultprods = [
     'CL61_TBS_03km', 'CL61_TBS_15km', 'MRR1', 'SunScout_met5'
 ];
+
+// Product bundles
+export const prodBundles = {
+    'Default Products': [...defaultprods],
+    'All 3 km Products': ['CL61_TBS_03km', 
+                          'CL61_LDR_03km', 
+                          'CL61_SnC_03km', 
+                          'LFTE_TBS_03km', 
+                          'LFTN_TBS_03km', 
+                          'LFTW_TBS_03km'],
+    'All 15 km Products': ['CL61_TBS_15km', 
+                          'CL61_LDR_15km', 
+                          'CL61_SnC_15km', 
+                          'LFTE_TBS_15km', 
+                          'LFTN_TBS_15km', 
+                          'LFTW_TBS_15km'],
+}
 
 // Image locations
 export const sourceURL = 'https://environmentanalytics.com/PlymouthNC/WebPerusal/';
@@ -113,4 +135,27 @@ export function shareToast(message = 'Link copied to clipboard!') {
     setTimeout(() => {
         toast.classList.remove('show');
     }, 2000);
+}
+
+export function attachSidebarToggleHandler() {
+    const sidebar = document.getElementById('sidebarControlsContainer');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const root = document.documentElement;
+    if (!sidebar || !toggleBtn) return;
+
+    toggleBtn.onclick = function() {
+        const isClosed = sidebar.classList.contains('close');
+        const openWidth = getComputedStyle(root).getPropertyValue('--sidebar-width-open').trim();
+        const closedWidth = getComputedStyle(root).getPropertyValue('--sidebar-width-closed').trim();
+
+        if (isClosed) {
+            sidebar.classList.remove('close');
+            root.style.setProperty('--sidebar-width', openWidth);
+            toggleBtn.innerHTML = '«';
+        } else {
+            sidebar.classList.add('close');
+            root.style.setProperty('--sidebar-width', closedWidth);
+            toggleBtn.innerHTML = '»';
+        }
+    };
 }

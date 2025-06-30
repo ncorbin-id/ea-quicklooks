@@ -1,5 +1,5 @@
 /** fullsize.js
- * JavaScipt handling for the fullsize image clickthrough pages 
+ * JavaScript handling for the fullsize image clickthrough pages 
  */
 
 //import vars and functions
@@ -104,8 +104,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // load each product image
-        prods.forEach(product => {
+        // load each product image in the correct order
+        let reorderedProds = prods;
+        const savedOrder = sessionStorage.getItem('prodsOrder');
+        if (savedOrder) {
+            const parsedOrder = JSON.parse(savedOrder);
+            reorderedProds = parsedOrder.filter(p => prods.includes(p));
+            reorderedProds = reorderedProds.concat(prods.filter(p => !reorderedProds.includes(p)));
+        }
+        reorderedProds.forEach(product => {
             // construct image name and URL
             if (!activeProds.has(product)) return;
             const imageName = getImageName(yyyy, mm, dd, product, fileext);
@@ -116,12 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const wrapper = document.createElement('div');
             wrapper.className = 'fullsize-image-wrapper';
             wrapper.id = product; // enables #anchor scrolling
-    
+
             // Image element (sits within the wrapper)
             const img = document.createElement('img');
             img.alt = `${product} image`;
             img.className = 'fullsizeImage';
-    
+
             // Link around image (enables hyperlink to image on click)
             const link = document.createElement('a');
             link.href = imageURL; // change image link destination here
@@ -131,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // add children to wrapper
             wrapper.appendChild(link);
             imageContainer.appendChild(wrapper);
-    
+
             // Test if image exists before showing it
             const imagePreloader = new Image();
             imagePreloader.onload = () => {

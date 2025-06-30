@@ -29,20 +29,42 @@
     </div>
 
     <div id="sidebarControlsContainer" class="sidebar-controls-container">
-        <button class="closebtn" id="toggleBtn" title="Toggle Product Control Menu">«</button>
-        <select class="menuItem" id="jumpToProduct">
-            <option class="input-text" value="">Jump to product...</option>
-        </select>
-        <h3 class="menuItem">Product Display</h3>
-        <div id="product-toggles"></div>
+        <div class="sidebar-header-row">
+            <button id="helpBtn" class="help-btn" title="Sidebar Help">?</button>
+            <button class="closebtn" id="toggleBtn" title="Toggle Product Control Menu">«</button>
+        </div>
+        <div class="sidebar-content">
+            <select class="menuItem" id="jumpToProductBundle">
+                <option class="input-text" value="">Select a bundle...</option>
+            </select>
+            <h3 class="menuItem">Product Display</h3>
+            <div id="all-toggle"></div>
+            <hr class="toggle-divider">
+            <div id="product-toggles"></div>
+        </div>
     </div>
 
-    
+    <!-- Modal for help instructions -->
+    <div id="helpModal" class="help-modal">
+        <div class="help-modal-content">
+            <span class="help-modal-close" id="helpModalClose">&times;</span>
+            <h2>Sidebar Help</h2>
+            <ul>
+                <li><b>Hover</b> over a product name to see a description tooltip.</li>
+                <li><b>Drag</b> the <span style="font-size:1.2em;">&#9776;</span> handle to reorder products.</li>
+                <li><b>Click</b> a product name to jump to its image.</li>
+                <li><b>Select a bundle</b> to quickly toggle groups of products.</li>
+                <li><b>Toggle All</b> to show or hide all products at once.</li>
+                <li><b>Reset Order</b> to restore the default product order.</li>
+            </ul>
+        </div>
+    </div>
 
     <div id="toast" class="toast">Link copied to clipboard!</div>
 
     <script src="air-datepicker/air-datepicker.js"></script>
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/fullsize.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </body>
 </html>
