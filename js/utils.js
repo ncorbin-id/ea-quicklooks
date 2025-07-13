@@ -5,7 +5,7 @@
 // Create any new product bundles in the prodBundles object.
 export const prods = [
     'CL61_TBS_03km', 'CL61_TBS_15km',
-    'MRR1',
+    'MRR1', 'purpAir1',
     'CL61_LDR_03km', 'CL61_LDR_15km',
     'CL61_SnC_03km', 'CL61_SnC_15km',
     'LFTE_TBS_03km', 'LFTE_TBS_15km',
@@ -18,6 +18,7 @@ export const prodLabels = [
     'Backscatter Up (3 km)',
     'Backscatter Up (15 km)',
     'MRR',
+    'PurpleAir',
     'LDR Up (3 km)',
     'LDR Up (15 km)',
     'Layer and Cloud (3 km)',
@@ -36,6 +37,7 @@ export const tooltipLabels = [
     'Upward-Pointing Backscatter (0 - 3 km)',
     'Upward-Pointing Backscatter (0 - 15 km)',
     'Micro Rain Radar',
+    'PurpleAir Air Quality Monitor',
     'Upward-Pointing LDR (0 - 3 km)',
     'Upward-Pointing LDR (0 - 15 km)',
     'Layer and Cloud Detection (0 - 3 km)',
@@ -52,7 +54,7 @@ export const tooltipLabels = [
 
 // default products
 export const defaultprods = [
-    'CL61_TBS_03km', 'CL61_TBS_15km', 'MRR1', 'SunScout_met5'
+    'CL61_TBS_03km', 'CL61_TBS_15km', 'MRR1', 'purpAir1', 'SunScout_met5'
 ];
 
 // Product bundles
