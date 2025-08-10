@@ -8,7 +8,10 @@ import {
     utcToLocalDate,
     disableNext,
     formatDate,
-    getStoredOrURLParam
+    getStoredOrURLParam,
+    getThumbImageName,
+    getThumbnailURL,
+    getAnchor
 } from './utils.js';
 
 let activeDate;
@@ -21,11 +24,6 @@ const prevButton = document.getElementById('prevButton');
 const nextButton = document.getElementById('nextButton');
 const todayButton = document.getElementById('todayButton');
 const incrementSelect = document.getElementById('increment');
-
-const getThumbImageName = (year, month, day, thumb, ext) =>
-    `thumbnail_tbs_${year}${month}${day}_${thumb}${ext}`;
-const getThumbnailURL = (sourceURL, year, month, name) =>
-    `${sourceURL}${year}${month}/${name}`;
 
 // Initialize from session or URL
 const now = new Date();
@@ -97,8 +95,9 @@ function updateImages() {
 
         const thumbName = getThumbImageName(y, m, d, thumb, fileext);
         const thumbURL = getThumbnailURL(sourceURL, y, m, thumbName);
-        console.log('Looking for thumbnail URL: ', thumbURL)
-        const anchor = thumb.includes('03km') ? 'CL61_TBS_03km' : 'CL61_TBS_15km';
+        console.log('Looking for thumbnail URL: ', thumbURL);
+
+        const anchor = getAnchor(thumb);
 
         const img = document.createElement('img');
         img.alt = `Thumbnail ${i}`;

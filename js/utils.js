@@ -161,3 +161,29 @@ export function attachSidebarToggleHandler() {
         }
     };
 }
+
+export function getThumbImageName(year, month, day, thumb, ext) {
+    if (thumb === 'ghi') {
+        return `thumbnail_ghi_${year}${month}${day}${ext}`;
+    } else if (thumb === 'tbs_03km') {
+        return `thumbnail_tbs_${year}${month}${day}_03km${ext}`;
+    } else if (thumb === 'tbs_15km') {
+        return `thumbnail_tbs_${year}${month}${day}_15km${ext}`;
+    }
+    return '';
+}
+
+export function getThumbnailURL(sourceURL, year, month, name) {
+    return `${sourceURL}${year}${month}/${name}`;
+}
+
+export function getAnchor(thumb) {
+    if (thumb === 'tbs_03km') {
+        return 'CL61_TBS_03km';
+    } else if (thumb === 'tbs_15km') {
+        return 'CL61_TBS_15km';
+    } else if (thumb === 'ghi') {
+        return 'SunScout_met5';
+    }
+    return '';
+}
