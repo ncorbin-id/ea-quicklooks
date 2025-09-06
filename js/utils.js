@@ -169,6 +169,8 @@ export function getThumbImageName(year, month, day, thumb, ext) {
         return `thumbnail_tbs_${year}${month}${day}_03km${ext}`;
     } else if (thumb === 'tbs_15km') {
         return `thumbnail_tbs_${year}${month}${day}_15km${ext}`;
+    } else if (thumb === 'temp') {
+        return `thumbnail_temp_${year}${month}${day}${ext}`;
     }
     return '';
 }
@@ -183,6 +185,9 @@ export function getAnchor(thumb) {
     } else if (thumb === 'tbs_15km') {
         return 'CL61_TBS_15km';
     } else if (thumb === 'ghi') {
+        return 'SunScout_met5';
+    }
+    else if (thumb === 'temp') {
         return 'SunScout_met5';
     }
     return '';
