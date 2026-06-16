@@ -171,6 +171,8 @@ export function getThumbImageName(year, month, day, thumb, ext) {
         return `thumbnail_tbs_${year}${month}${day}_15km${ext}`;
     } else if (thumb === 'temp') {
         return `thumbnail_temp_${year}${month}${day}${ext}`;
+    } else if (thumb === 'mrrz') {
+        return `thumbnail_mrr_z_${year}${month}${day}${ext}`;
     }
     return '';
 }
