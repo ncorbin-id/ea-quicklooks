@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ECAOS Perusal App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;700;900&display=swap">
+  <link rel="stylesheet" href="css/styles-twentysixteen.css">
+  <link rel="stylesheet" href="air-datepicker/air-datepicker.css">
+</head>
+<body>
+
+  <div class="page-frame">
+    <div class="page-inner">
+
+      <!-- ===== Header ===== -->
+      <header class="site-header">
+        <img src="https://www.environmentanalytics.com/wp-content/uploads/2018/08/cropped-Environment_Analytics_Logo_1800width_transparent-1.png"
+             alt="Environment Analytics"
+             class="site-logo">
+        <div class="site-title-group">
+          <span class="site-location">PLYMOUTH, NC</span>
+          <span class="site-name">Eastern Carolina Atmospheric Observing Site (ECAOS)</span>
+        </div>
+      </header>
+
+      <!-- ===== Controls toolbar ===== -->
+      <div class="controls-toolbar">
+
+        <!-- Thumbnail -->
+        <div class="ctrl-group ctrl-group--first">
+          <label for="thumb" class="ctrl-label">Thumbnail</label>
+          <select id="thumb" class="input-text ctrl-select">
+            <option value="tbs_03km">Backscatter, 3 km</option>
+            <option value="tbs_15km">Backscatter, 15 km</option>
+            <option value="ghi">Global Hemispheric Irradiance</option>
+            <option value="temp">Temperature/Dewpoint</option>
+            <option value="mrrz">MRR Reflectivity</option>
+          </select>
+        </div>
+
+        <!-- Date -->
+        <div class="ctrl-group">
+          <label for="cal" class="ctrl-label">Date (UTC)</label>
+          <div class="ctrl-date-row">
+            <div class="ctrl-date-wrapper">
+              <input id="cal" type="text" class="input-text ctrl-date-input">
+              <i class="genericon genericon-day ctrl-date-icon"></i>
+            </div>
+            <button id="todayButton" class="ctrl-btn">Today</button>
+          </div>
+        </div>
+
+        <!-- Navigate -->
+        <div class="ctrl-group">
+          <span class="ctrl-label">Navigate</span>
+          <div class="ctrl-row">
+            <button id="prevButton" class="ctrl-btn">
+              <i class="genericon genericon-previous"></i>Prev
+            </button>
+            <select id="increment" class="ctrl-select">
+              <option value="1">1 day</option>
+              <option value="7">7 days</option>
+              <option value="30" selected>30 days</option>
+            </select>
+            <button id="nextButton" class="ctrl-btn">
+              Next<i class="genericon genericon-next"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===== Image grid ===== -->
+      <div id="imageGrid"></div>
+
+      <!-- ===== Site footer ===== -->
+      <div class="site-footer">
+        <span class="site-footer-name">ENVIRONMENT ANALYTICS&emsp;|&emsp;ECAOS</span>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="air-datepicker/air-datepicker.js"></script>
+  <script type="module" src="js/utils.js"></script>
+  <script type="module" src="js/script.js"></script>
+</body>
+</html>

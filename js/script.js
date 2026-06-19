@@ -112,9 +112,14 @@ function updateImages() {
         link.href = `fullsize.html?thumb=${thumb}&year=${y}&month=${m}&day=${d}#${anchor}`;
         link.appendChild(img);
 
+        const dateChip = document.createElement('div');
+        dateChip.className = 'grid-item-date';
+        dateChip.textContent = `${y}-${m}-${d}`;
+
         const item = document.createElement('div');
         item.className = 'grid-item';
         item.appendChild(link);
+        item.appendChild(dateChip);
         imageGrid.appendChild(item);
 
         img.src = thumbURL;
