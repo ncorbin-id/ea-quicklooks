@@ -4,54 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Full Size Image</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;700;900&display=swap">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="air-datepicker/air-datepicker.css">
 </head>
 <body>
-    
-    <div class="controls-container fullsize">
-        <a href="https://www.environmentanalytics.com">
-            <img class="logo" src="https://www.environmentanalytics.com/wp-content/uploads/2018/08/cropped-Environment_Analytics_Logo_1800width_transparent-1.png" alt="Logo">
-        </a>
-        <div class="top-row">
-            <button id="prevButton">Previous</button>
-            <input id="fullsizecal" type="text" class="input-text" value>
-            <button id="nextButton">Next</button>
-        </div>
-        <div class="bottom-row">
-            <button id="backToGridButton">Back to Grid</button>
-            <button id="copyLinkButton" title="Copy Shareable Link">🔗</button>
-        </div>
-    </div>
 
-    <div id="fullsizeMainContainer" class="fullsize-main-container">
-        <div id="fullsizeImageContainer" class="fullsize-image-container"></div>
-    </div>
+    <div class="page-frame page-frame--fullsize">
+        <div class="fs-shell">
 
-    <div id="sidebarControlsContainer" class="sidebar-controls-container">
-        <div class="sidebar-header-row">
-            <button id="helpBtn" class="help-btn" title="Sidebar Help">?</button>
-            <button class="closebtn" id="toggleBtn" title="Toggle Product Control Menu">«</button>
-        </div>
-        <div class="sidebar-content">
-            <select class="menuItem" id="jumpToProductBundle">
-                <option class="input-text" value="">Select a bundle...</option>
-            </select>
-            <h3 class="menuItem">Product Display</h3>
-            <div id="all-toggle"></div>
-            <hr class="toggle-divider">
-            <div id="product-toggles"></div>
+            <!-- ===== Sidebar drawer ===== -->
+            <aside id="sidebarControlsContainer" class="fs-sidebar">
+                <button id="helpBtn" class="fs-icon-btn fs-help-btn" type="button">
+                    <i class="genericon genericon-help"></i>
+                    <span class="fs-tooltip">Sidebar help</span>
+                </button>
+                <button class="fs-icon-btn fs-collapse-btn" id="toggleBtn" title="Toggle product control menu" type="button">
+                    <span class="fs-collapse-arrow">&laquo;</span>
+                </button>
+
+                <div class="fs-sidebar-content">
+                    <select class="ctrl-select fs-bundle-select" id="jumpToProductBundle">
+                        <option value="">Select a bundle&hellip;</option>
+                    </select>
+
+                    <span class="ctrl-label fs-section-label">Product Display</span>
+
+                    <div id="all-toggle"></div>
+                    <hr class="toggle-divider">
+                    <div id="product-toggles"></div>
+                </div>
+            </aside>
+
+            <!-- ===== Main column ===== -->
+            <div class="fs-main">
+
+                <div class="fs-toolbar">
+                    <div class="fs-toolbar-controls">
+                        <button id="prevButton" class="ctrl-btn">
+                            <i class="genericon genericon-previous"></i>Previous
+                        </button>
+                        <div class="ctrl-date-wrapper">
+                            <input id="fullsizecal" type="text" class="input-text ctrl-date-input" value>
+                            <i class="genericon genericon-day ctrl-date-icon"></i>
+                        </div>
+                        <button id="nextButton" class="ctrl-btn">
+                            Next<i class="genericon genericon-next"></i>
+                        </button>
+                        <div class="fs-toolbar-divider"></div>
+                        <button id="backToGridButton" class="ctrl-btn ctrl-btn--dark">
+                            Back to Grid
+                        </button>
+                    </div>
+
+                    <a href="https://www.environmentanalytics.com" class="fs-logo-link">
+                        <img class="fs-logo" src="https://www.environmentanalytics.com/wp-content/uploads/2018/08/cropped-Environment_Analytics_Logo_1800width_transparent-1.png" alt="Environment Analytics">
+                    </a>
+                </div>
+
+                <div id="fullsizeMainContainer" class="fs-stage">
+                    <div id="fullsizeImageContainer" class="fs-stage-inner"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <!-- Modal for help instructions -->
     <div id="helpModal" class="help-modal">
         <div class="help-modal-content">
-            <span class="help-modal-close" id="helpModalClose">&times;</span>
+            <span class="help-modal-close" id="helpModalClose">
+                <i class="genericon genericon-close"></i>
+            </span>
             <h2>Sidebar Help</h2>
             <ul>
                 <li><b>Hover</b> over a product name to see a description tooltip.</li>
-                <li><b>Drag</b> the <span style="font-size:1.2em;">&#9776;</span> handle to reorder products.</li>
+                <li><b>Drag</b> the handle to reorder products.</li>
                 <li><b>Click</b> a product name to jump to its image.</li>
                 <li><b>Select a bundle</b> to quickly toggle groups of products.</li>
                 <li><b>Toggle All</b> to show or hide all products at once.</li>

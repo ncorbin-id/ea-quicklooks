@@ -8,8 +8,6 @@ import {
     sourceURL,
     fallbackImageFS,
     fileext,
-    generateShareURL,
-    shareToast,
     utcToLocalDate,
     disableNext,
     formatDate,
@@ -171,16 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     backToGridButton.addEventListener('click', () => {
         const { yyyy, mm, dd } = formatDate(activeDate);
         window.location.href = `index.html?year=${yyyy}&month=${mm}&day=${dd}&thumb=${encodeURIComponent(thumb)}`;
-    });
-
-    // copy link button
-    document.getElementById('copyLinkButton').addEventListener('click', () => {
-        const thumb = sessionStorage.getItem('thumb') || 'default-thumb';
-        const shareURL = generateShareURL(activeDate, thumb);
-    
-        navigator.clipboard.writeText(shareURL)
-            .then(() => shareToast('✅ Link copied to clipboard'))
-            .catch(err => console.error('Failed to copy link: ', err));
     });
 
     // initialize sidebar (sidebar.js)

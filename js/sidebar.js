@@ -58,7 +58,7 @@ export function initializeSidebar(activeProds, updateCallback) {
 
     // --- Add Reset Order Button ---
     const resetOrderBtn = document.createElement('button');
-    resetOrderBtn.textContent = 'Reset Order';
+    resetOrderBtn.innerHTML = '<i class="genericon genericon-refresh"></i>Reset Order';
     resetOrderBtn.className = 'reset-order-btn';
     resetOrderBtn.type = 'button';
     resetOrderBtn.title = 'Reset product order to default';
@@ -95,7 +95,7 @@ export function initializeSidebar(activeProds, updateCallback) {
         const dragHandle = document.createElement('span');
         dragHandle.className = 'drag-handle';
         dragHandle.title = 'Drag to reorder';
-        dragHandle.innerHTML = '&#9776;'; // Unicode "hamburger" icon
+        dragHandle.innerHTML = '<i class="genericon genericon-draggable"></i>';
 
         // Toggle label with tooltip on hover
         const label = document.createElement('label');
