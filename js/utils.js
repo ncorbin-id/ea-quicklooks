@@ -5,19 +5,20 @@
 // Create any new product bundles in the prodBundles object.
 export const prods = [
     'CL61_TBS_03km', 'CL61_TBS_15km',
-    'MRR1', 'purpAir1',
+    'MRR1', 'SunScout_met5', 'purpAir1',
     'CL61_LDR_03km', 'CL61_LDR_15km',
     'CL61_SnC_03km', 'CL61_SnC_15km',
     'LFTE_TBS_03km', 'LFTE_TBS_15km',
     'LFTN_TBS_03km', 'LFTN_TBS_15km',
     'LFTW_TBS_03km', 'LFTW_TBS_15km',
-    'SunScout_diag', 'SunScout_met5'
+    'SunScout_B_met', 'SunScout_diag'
 ];
 
 export const prodLabels = [
     'Backscatter Up (3 km)',
     'Backscatter Up (15 km)',
     'MRR',
+    'SunScout Meteorology',
     'PurpleAir',
     'LDR Up (3 km)',
     'LDR Up (15 km)',
@@ -29,14 +30,15 @@ export const prodLabels = [
     'Backscatter North (15 km)',
     'Backscatter West (3 km)',
     'Backscatter West (15 km)',
-    'SunScout Diagnostics',
-    'SunScout Meteorology'
+    'SunScout Radiation',
+    'SunScout Diagnostics'
 ];
 
 export const tooltipLabels = [
     'Upward-Pointing Backscatter (0 - 3 km)',
     'Upward-Pointing Backscatter (0 - 15 km)',
     'Micro Rain Radar',
+    'SunScout Meteorology',
     'PurpleAir Air Quality Monitor',
     'Upward-Pointing LDR (0 - 3 km)',
     'Upward-Pointing LDR (0 - 15 km)',
@@ -48,18 +50,19 @@ export const tooltipLabels = [
     'North-Pointing Backscatter (0 - 15 km)',
     'West-Pointing Backscatter (0 - 3 km)',
     'West-Pointing Backscatter (0 -15 km)',
-    'SunScout Diagnostics',
-    'SunScout Meteorology'
+    'SunScout Radiation',
+    'SunScout Diagnostics'
 ];
 
 // default products
 export const defaultprods = [
-    'CL61_TBS_03km', 'CL61_TBS_15km', 'MRR1', 'purpAir1', 'SunScout_met5'
+    'CL61_TBS_03km', 'CL61_TBS_15km', 'MRR1', 'SunScout_met5'
 ];
 
 // Product bundles
 export const prodBundles = {
     'Default Products': [...defaultprods],
+    'Precipitation Products': ['MRR1', 'SunScout_met5'],
     'All 3 km Products': ['CL61_TBS_03km', 
                           'CL61_LDR_03km', 
                           'CL61_SnC_03km', 
@@ -72,6 +75,7 @@ export const prodBundles = {
                           'LFTE_TBS_15km', 
                           'LFTN_TBS_15km', 
                           'LFTW_TBS_15km'],
+    'All SunScout Products': ['SunScout_met5', 'SunScout_B_met', 'SunScout_diag']
 }
 
 // Image locations
@@ -153,11 +157,9 @@ export function attachSidebarToggleHandler() {
         if (isClosed) {
             sidebar.classList.remove('close');
             root.style.setProperty('--sidebar-width', openWidth);
-            toggleBtn.innerHTML = '«';
         } else {
             sidebar.classList.add('close');
             root.style.setProperty('--sidebar-width', closedWidth);
-            toggleBtn.innerHTML = '»';
         }
     };
 }
@@ -188,9 +190,10 @@ export function getAnchor(thumb) {
         return 'CL61_TBS_15km';
     } else if (thumb === 'ghi') {
         return 'SunScout_met5';
-    }
-    else if (thumb === 'temp') {
+    } else if (thumb === 'temp') {
         return 'SunScout_met5';
+    } else if (thumb === 'mrrz') {
+        return 'MRR1';
     }
     return '';
 }
